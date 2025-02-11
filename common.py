@@ -5,61 +5,32 @@ COLORS = ['R', 'V', 'B', 'J', 'N', 'M', 'O', 'G']
 # Notez que vos programmes doivent continuer à fonctionner si on change les valeurs par défaut ci-dessus
 
 
-def evaluation(arg,ref):
+def evaluation(arg, ref):
+    assert len(arg) == len(ref), "Les deux combinaisons doivent avoir la même longueur"
+    
     LENGTH = len(arg)
-    if len(arg)!= LENGTH :
-        assert("quoi")
-    if len(ref) != LENGTH :
-        assert("quoi")
-        
-    nombre_bien_places=0
-    nombre_mal_places=0
-    deja_utilise = set([])
-    for indice_arg in range(LENGTH):
-        
-        bien_place = False
-        mal_place = False
-        couleur_arg = arg[indice_arg]
-
-        indice_temp_ref_bien = None
-        indice_temp_ref_mal = None
-        for indice_ref in range(LENGTH):
-            if indice_ref not in deja_utilise :
-        
-            
-                couleur_ref = ref[indice_ref]
-                
-                if couleur_arg == couleur_ref :
-                    
-                    if indice_arg == indice_ref :
-                        indice_temp_ref_bien = indice_ref
-                        bien_place = True
-                    else : 
-                        
-                        indice_temp_ref_mal = indice_ref
-                        mal_place = True
-        
-        if indice_temp_ref_bien != None :
-            
-            deja_utilise.add(indice_temp_ref_bien)
-            indice_temp_ref_bien = None
-            indice_temp_ref_mal = None
-            
-            
-        elif indice_temp_ref_mal != None :
-            
-            deja_utilise.add(indice_temp_ref_mal)
-            indice_temp_ref_bien = None
-            indice_temp_ref_mal = None
-        
-        if bien_place :
-            nombre_bien_places+=1
-        elif mal_place:
-            nombre_mal_places+=1
-        
-                    
-    print((nombre_bien_places,nombre_mal_places))
-    return(nombre_bien_places,nombre_mal_places)
+    bien_places = 0
+    mal_places = 0
+    
+    # Étape 1 : Détection des bien placés
+    reste_arg = []
+    reste_ref = []
+    
+    for i in range(LENGTH):
+        # assert arg[i] in COLORS, "Les couleurs en entré doivent être dans les couleurs disponibles"
+        if arg[i] == ref[i]:
+            bien_places += 1
+        else:
+            reste_arg.append(arg[i])
+            reste_ref.append(ref[i])
+    
+    # Étape 2 : Détection des mal placés (présents mais mal placés)
+    for couleur in reste_arg:
+        if couleur in reste_ref:
+            mal_places += 1
+            reste_ref.remove(couleur)  # Empêche de compter une couleur plusieurs fois
+    
+    return bien_places, mal_places
 
 """
 argument = ['E', 'G', 'Y', 'L', 'C']

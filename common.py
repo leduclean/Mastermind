@@ -34,7 +34,42 @@ def evaluation(arg, ref):
 
     return bien_places, mal_places
 
-"""
+
+#TO DO : Ajouter doc string et meilleur commentaires et tt ET CHANGER LES VARIABLES EN ANGLAIS
+
+def donner_possibles(combinaison_teste,evaluation_associe):
+    bien_places,mal_places=evaluation_associe
+    #Faire un ensemble avec toutes les possibilites,
+    liste_ensemble_permutation=itertools.permutations(COLORS,LENGTH)
+    #Maintenant on va supprimer les combinaisons qui sont pas possibles et apres on aura l ensemble des combinaisons finales
+
+
+    liste_return = []
+
+
+    for element in liste_ensemble_permutation :
+        #On regarde si le nombre de meme couleur, si c'est egal a bien_places+ mal_places c'est deja bien
+        #Ensuite on regarde si le nombre de meme places = nombre bien places
+        bplaces,mplaces = evaluation(element,combinaison_teste)
+        if bplaces == bien_places and mplaces == mal_places :
+            liste_return.append(element)
+
+    #print(liste_return)
+    return set(liste_return)
+
+# To DO : Commentaires + changer les variables en anglais
+def maj_possibles(ensemble_combinaisons_possibles, combinaison_teste, evaluation_associe):
+    ensemble_combinaisons_possibles_nouveau = donner_possibles(combinaison_teste,evaluation_associe)
+
+    ensemble_combinaisons_possibles.intersection_update(ensemble_combinaisons_possibles_nouveau) # mets a jour directement le set avant le .intersectionupdate
+    return ensemble_combinaisons_possibles
+
+
+#%% Partie Test
+
+donner_possibles(['R', 'V', 'B', 'J'],evaluation(['R', 'V', 'B', 'J'], ['R', 'V', 'B', 'J']))
+
+
 argument = ['E', 'G', 'Y', 'L', 'C']
 ref = ['B', 'V', 'E', 'A', 'O']
 
@@ -62,4 +97,3 @@ evaluation(argument,ref)
 argument = ['J', 'C', 'O', 'C', 'T', 'B']
 ref = ['V', 'B', 'E', 'X', 'Q', 'G']
 evaluation(argument,ref)
-"""

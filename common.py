@@ -2,20 +2,22 @@
 
 LENGTH = 4
 COLORS = ['R', 'V', 'B', 'J', 'N', 'M', 'O', 'G']
+import itertools
+
 # Notez que vos programmes doivent continuer à fonctionner si on change les valeurs par défaut ci-dessus
 
 
 def evaluation(arg, ref):
     assert len(arg) == len(ref), "Les deux combinaisons doivent avoir la même longueur"
-    
+
     LENGTH = len(arg)
     bien_places = 0
     mal_places = 0
-    
+
     # Étape 1 : Détection des bien placés
     reste_arg = []
     reste_ref = []
-    
+
     for i in range(LENGTH):
         # assert arg[i] in COLORS, "Les couleurs en entré doivent être dans les couleurs disponibles"
         if arg[i] == ref[i]:
@@ -23,13 +25,13 @@ def evaluation(arg, ref):
         else:
             reste_arg.append(arg[i])
             reste_ref.append(ref[i])
-    
+
     # Étape 2 : Détection des mal placés (présents mais mal placés)
     for couleur in reste_arg:
         if couleur in reste_ref:
             mal_places += 1
             reste_ref.remove(couleur)  # Empêche de compter une couleur plusieurs fois
-    
+
     return bien_places, mal_places
 
 """
@@ -61,7 +63,3 @@ argument = ['J', 'C', 'O', 'C', 'T', 'B']
 ref = ['V', 'B', 'E', 'X', 'Q', 'G']
 evaluation(argument,ref)
 """
-              
-
-        
-        

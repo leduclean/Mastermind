@@ -31,6 +31,41 @@ def play(codemaker, codebreaker, quiet=False):
             return n_essais
 
 
+
+
+
+def play_log(codemaker, codebreaker, quiet=False):
+    n_essais = 0
+    codebreaker.init()
+    codemaker.init()
+    ev = None
+
+    ##### Seule chose qui change du programme play
+    with open("log.txt", 'w') as log:
+    #####
+        if not quiet:
+            print('Combinaisons de taille {}, couleurs disponibles {}'.format(common.LENGTH, common.COLORS))
+
+        while True:
+
+            combinaison = codebreaker.codebreaker(ev)
+            ev = codemaker.codemaker(combinaison)
+            n_essais += 1
+            ######## Seules choses qui changent du programme play
+            log.write(combinaison)
+            log.write(ev)
+            #########
+            if not quiet:
+                print("Essai {} : {} ({},{})".format(n_essais, combinaison, ev[0], ev[1]))
+            
+
+            if ev[0] >= common.LENGTH:
+                if not quiet:
+                    print("Bravo ! Trouvé {} en {} essais".format(combinaison, n_essais))
+                return n_essais
+            
+            
+
 if __name__ == '__main__':
     # Les lignes suivantes sont à modifier / supprimer selon ce qu'on veut faire, quelques exemples :
 

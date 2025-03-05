@@ -4,7 +4,11 @@ Created on Wed Mar  5 12:46:54 2025
 
 @author: Simon
 """
-import common
+# On utilise un import relatif (`from . import common`)  
+# pour s'assurer que le module est bien importé,  
+# peu importe comment l'application est exécutée avec Flask.  
+# Cela évite les erreurs liées aux imports absolus.  
+from . import common
 
 def check_codemaker(log_file):
     

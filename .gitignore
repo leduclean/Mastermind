@@ -1,1 +1,7 @@
-__pycache__
+__pycache__/
+venv/
+*.txt
+*.pdf  
+instance/
+.env
+.webassets-cache/

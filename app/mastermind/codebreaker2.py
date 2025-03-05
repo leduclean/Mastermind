@@ -1,8 +1,13 @@
 # -*- coding: utf-8 -*-
-import codemaker0
+
 import random
-import common  # N'utilisez pas la syntaxe "form random import XXX"
 import itertools
+# On utilise un import relatif (`from . import common`)  
+# pour s'assurer que le module est bien importé,  
+# peu importe comment l'application est exécutée avec Flask.  
+# Cela évite les erreurs liées aux imports absolus.  
+from . import common  # N'utilisez pas la syntaxe "form random import XXX"
+
 
 possible_combinations = set()
 last_guess = None
@@ -22,7 +27,6 @@ def codebreaker(evaluation_p: tuple) -> str:
     if evaluation_p is not None:
         # on filtre l'ensemble possibles selon l'évaluation du dernier coup.
         common.maj_possibles(possible_combinations, last_guess, evaluation_p)
-        print(possible_combinations)
         
     # on choisi de manière aléatoire d'une combinaison parmi les possibilités restantes
     to_try = random.choice(list(possible_combinations))

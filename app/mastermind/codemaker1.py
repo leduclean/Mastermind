@@ -1,6 +1,10 @@
 import sys
 import random 
-import common
+# On utilise un import relatif (`from . import common`)  
+# pour s'assurer que le module est bien importé,  
+# peu importe comment l'application est exécutée avec Flask.  
+# Cela évite les erreurs liées aux imports absolus.  
+from . import common
 
 def init():
     """

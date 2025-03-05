@@ -9,7 +9,7 @@ def init():
     global tried
     tried.clear()
 
-def codebreaker(evaluation_p) -> str:
+def codebreaker(evaluation_p: tuple) -> str:
     """
     Génère une combinaison aléatoire non tentée. Par soucis de compatibilité avec les foncitons
     de test, on lui passe aussi l'evaluation précèdente en argument même si elle ne sera pas prise en compte

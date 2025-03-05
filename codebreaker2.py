@@ -1,28 +1,31 @@
 # -*- coding: utf-8 -*-
-
+import codemaker0
 import random
 import common  # N'utilisez pas la syntaxe "form random import XXX"
 import itertools
 
-possible_combinations=[]
+possible_combinations = set()
+last_guess = None
+
 def init():
     #Initialise l'ensemble des valeurs possibles
-    global possible_combinations
-    possible_combinations=itertools.permutations(common.COLORS,common.LENGTH)
+    global possible_combinations, last_guess
+    possible_combinations = set(map(''.join, itertools.product(common.COLORS, repeat = common.LENGTH)))
+    last_guess = None
 
 
-
-def codebreaker(evaluation_p):
+def codebreaker(evaluation_p: tuple) -> str:
     """
-    L'argument evaluation_p est l'évaluation qu'on reçoit pour la dernière
-    combinaison qu'on a proposée (et vaut None si c'est le premier coup de la
-    partie). Cette version triviale n'utilise pas cette information, puisqu'elle joue au hasard.
+ 
     """
-    
-    global possible_combinations
-    
+    global possible_combinations, last_guess
+    if evaluation_p is not None:
+        # on filtre l'ensemble possibles selon l'évaluation du dernier coup.
+        common.maj_possibles(possible_combinations, last_guess, evaluation_p)
+        print(possible_combinations)
+        
+    # on choisi de manière aléatoire d'une combinaison parmi les possibilités restantes
     to_try = random.choice(list(possible_combinations))
-    common.maj_possibles(possible_combinations, to_try, evaluation_p)
-    
+    last_guess = to_try
     return to_try
 

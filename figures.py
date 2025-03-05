@@ -1,74 +1,105 @@
-import codemaker0
+import importlib
 import common
 import matplotlib.pyplot as plt
 
-#TO DO: réfléchir au mieux entre diagramme de dispersion et histogramme pour la fonction show gain 
+def get_codebreaker_module(version: int):
+    """Importe dynamiquement le module codebreaker de la version donnée."""
+    try:
+        return importlib.import_module(f"codebreaker{version}")
+    except ImportError:
+        raise ValueError(f"Module codebreaker{version} non trouvé.")
 
+def get_codemaker_module(version: int):
+    """Importe dynamiquement le module codemaker de la version donnée."""
+    try:
+        return importlib.import_module(f"codemaker{version}")
+    except ImportError:
+        raise ValueError(f"Module codemaker{version} non trouvé.")
 
-def get_number_of_try(codebreaker_version: int) -> int:
+def check_compatibility(codemaker_version: int, codebreaker_version: int):
     """
-    Renvoie le nombre d'essais nécessaire pour une version donnée au codebreaker afin de trouver la solution
+    Vérifie que le couple codemaker/codebreaker est compatible.
+    On lève une erreur si l'on tente de jouer codemaker0 avec codebreaker2,
+    car codebreaker2 a besoin d'une évaluation complète.
     """
+    if codemaker_version == 0 and codebreaker_version == 2:
+        raise ValueError("Incompatibilité détectée : codebreaker2 nécessite une évaluation complète et ne peut pas être utilisé avec codemaker0.")
+
+def play_game(codemaker_module, codebreaker_module, codemaker_version: int, codebreaker_version: int) -> int:
+    """
+    Joue une partie pour un codebreaker donné sur la solution déjà initialisée dans le module codemaker.
+    Le codebreaker est réinitialisé pour chaque partie, tandis que le codemaker conserve la solution.
+    """
+    check_compatibility(codemaker_version, codebreaker_version)
+    
+    codebreaker_module.init()  # Réinitialisation du codebreaker
     nbr_of_try = 0
     maker_evaluation = None
 
-    # Construit le nom du module à importer (par ex. "codebreaker0", "codebreaker1", etc.)
-    module_name = f"codebreaker{codebreaker_version}"
-    try:
-        # Import du module en fonciton de la méthode choisie 
-        codebreaker_module = __import__(module_name)
-    except ImportError:
-        raise ValueError(f"Module {module_name} non trouvé.")
-    
-    codebreaker_module.init() # on initialise le codebreaker afin de vider le set des combinaisons testées à la partie d'avant
-    while maker_evaluation != common.LENGTH:
+    # Premier coup
+    proposition = codebreaker_module.codebreaker(maker_evaluation)
+    maker_evaluation = codemaker_module.codemaker(proposition)
+    nbr_of_try += 1
+
+    while maker_evaluation[0] != common.LENGTH:
         nbr_of_try += 1
-        # On appelle la fonction codebreaker de la version importée en passant l'évaluation précédente
         proposition = codebreaker_module.codebreaker(maker_evaluation)
-        # codemaker0.codemaker renvoie un tuple : on récupère le premier élément (la valeur d'évaluation)
-        maker_evaluation = codemaker0.codemaker(proposition)[0]
-        
+        maker_evaluation = codemaker_module.codemaker(proposition)
+
     return nbr_of_try
 
-def show_histrogramme(version: int, nbr_of_game: int):
+def get_number_of_try(codemaker_version: int, codebreaker_version: int) -> int:
     """
-    Affiche l'histrogramme du nombre d'essais nécessaire a un codebreaker d'une version donnée 
-    pour trouver la solution pour un échantillon donné de nombre d'essais
+    Renvoie le nombre d'essais nécessaires pour qu'un codebreaker (version donnée)
+    trouve la solution présente dans le module codemaker (déjà initialisé).
+    """
+    check_compatibility(codemaker_version, codebreaker_version)
+    codebreaker_module = get_codebreaker_module(codebreaker_version)
+    codemaker_module = get_codemaker_module(codemaker_version)
+    return play_game(codemaker_module, codebreaker_module, codemaker_version, codebreaker_version)
+
+def show_histogram(codemaker_version: int, codebreaker_version: int, nbr_of_game: int):
+    """
+    Affiche un histogramme du nombre d'essais nécessaires pour qu'un codebreaker d'une version donnée
+    trouve la solution. Pour chaque partie, on réinitialise le codemaker afin d'obtenir une nouvelle solution.
     """
     resultats = []
+    codemaker_module = get_codemaker_module(codemaker_version)
+
     for _ in range(nbr_of_game):
-        codemaker0.init() # on doit tester sur une nouvelle partie à chaque fois donc il faut reinitialiser la solution
-        resultats.append(get_number_of_try(version))
+        codemaker_module.init()  # Nouvelle solution pour chaque partie
+        resultats.append(get_number_of_try(codemaker_version, codebreaker_version))
+
     plt.hist(resultats, bins=range(min(resultats), max(resultats) + 2), align='left', edgecolor='orange')
-    plt.xlabel('Valeurs retournées')
-    plt.ylabel('Fréquence')
-    plt.title(f'Histogramme du nombre de partie nécessaire à la version {version} pour trouver la solution sur {nbr_of_game} parties jouées')
+    plt.xlabel("Nombre d'essais")
+    plt.ylabel("Fréquence")
+    plt.title(f'Histogramme des essais pour codebreaker{codebreaker_version} contre codemaker{codemaker_version}')
     plt.show()
 
-# show_histrogramme(0, 100)
-# show_histrogramme(1, 100)
+def show_gain(codemaker_version: int, version1: int, version2: int, nbr_of_game: int):
+    """
+    Affiche un diagramme de dispersion du gain (différence d'essais) entre deux versions de codebreaker.
+    Pour chaque partie, le codemaker est initialisé une seule fois afin que les deux codebreaker jouent sur la même solution.
+    """
+    # Vérification de la compatibilité pour chaque codebreaker
+    check_compatibility(codemaker_version, version1)
+    check_compatibility(codemaker_version, version2)
 
-def get_gain(version1 : int, version2 : int)-> int:
-    """
-    Renvoie le gain de la version 2 par rapport à la version 1 calculé à de get_number_of_try()
-    """
-    return get_number_of_try(version1) - get_number_of_try(version2)
-
-
-def show_gain(version1: int, version2: int, nbr_of_game: int):
-    """
-    Affiche le diagramme de dispersion des gains de la version2 par rapport à la version1 sur un nombre de partie jouées
-    """
     gains = []
+    codemaker_module = get_codemaker_module(codemaker_version)
+
     for _ in range(nbr_of_game):
-        codemaker0.init() # on doit tester sur une nouvelle partie à chaque fois donc il faut reinitialiser la solution
-        gains.append(get_gain(version1, version2))
-    # Création d'un diagramme de dispersion
-    parties = list(range(1, nbr_of_game + 1))
-    plt.scatter(parties, gains, color='orange')
+        codemaker_module.init()  # Même solution pour les deux codebreaker
+        score1 = play_game(codemaker_module, get_codebreaker_module(version1), codemaker_version, version1)
+        score2 = play_game(codemaker_module, get_codebreaker_module(version2), codemaker_version, version2)
+        gains.append(score1 - score2)
+
+    plt.scatter(range(1, nbr_of_game + 1), gains, color='orange')
     plt.xlabel('Numéro de partie')
     plt.ylabel('Gain')
-    plt.title(f'Diagramme de dispersion du gain entre codebreaker{version1} et codebreaker{version2} sur {nbr_of_game} parties')
+    plt.title(f'Gain entre codebreaker{version2} et codebreaker{version1} contre codemaker{codemaker_version}')
     plt.show()
 
-# show_gain(0, 1, 100)
+# Exemples d'utilisation :
+# show_histogram(0, 1, 100)  # Fonctionnera
+# show_gain(0, 1, 2, 100)     # Lève une erreur si codemaker0 est utilisé avec codebreaker2

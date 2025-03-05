@@ -37,37 +37,32 @@ def evaluation(arg, ref):
 
 #TO DO : Ajouter doc string et meilleur commentaires et tt
 
-def donner_possibles(tested_combination, associated_evaluation):
+def donner_possibles(tested_combination: str, associated_evaluation: tuple) -> set:
     correctly_placed , incorrectly_placed = associated_evaluation
     #Faire un ensemble avec toutes les possibilites,
-    permutation_list=itertools.permutations(COLORS,LENGTH)
+    all_permutations = set(map(''.join,itertools.product(COLORS,repeat = LENGTH))) # On convertit les tuples en chaines de caractères
     #Maintenant on va supprimer les combinaisons qui sont pas possibles et apres on aura l ensemble des combinaisons finales
 
+    possible_combination = set()
 
-    return_list = []
-
-
-    for element in permutation_list :
+    for element in all_permutations :
         #On regarde si le nombre de meme couleur, si c'est egal a bien_places+ mal_places c'est deja bien
         #Ensuite on regarde si le nombre de meme places = nombre bien places
-        cplaces,iplaces = evaluation(element,tested_combination)
-        if cplaces == correctly_placed and iplaces == incorrectly_placed :
-            return_list.append(element)
+        cplaces, iplaces = evaluation(tested_combination, element)
+        if cplaces == correctly_placed and iplaces == incorrectly_placed:
+            possible_combination.add(element)
 
     #print(liste_return)
-    return set(return_list)
+    return possible_combination
 
 # To DO : Commentaires
 def maj_possibles(possible_combinations, tested_combination, associated_evaluation):
-    new_possible_combinations = donner_possibles(tested_combination,associated_evaluation)
-
+    new_possible_combinations = donner_possibles(tested_combination, associated_evaluation)
     possible_combinations.intersection_update(new_possible_combinations) # mets a jour directement le set avant le .intersectionupdate
-    return possible_combinations
-
 
 #%% Partie Test
 
-donner_possibles(['R', 'V', 'B', 'J'],evaluation(['R', 'V', 'B', 'J'], ['R', 'V', 'B', 'J']))
+donner_possibles(['R', 'V', 'B', 'J'],evaluation(['R', 'V', 'B', 'J'], 'RVBR'))
 
 
 argument = ['E', 'G', 'Y', 'L', 'C']
@@ -97,3 +92,9 @@ evaluation(argument,ref)
 argument = ['J', 'C', 'O', 'C', 'T', 'B']
 ref = ['V', 'B', 'E', 'X', 'Q', 'G']
 evaluation(argument,ref)
+
+
+
+
+
+# %%

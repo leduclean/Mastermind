@@ -13,7 +13,7 @@ def init():
     return
 
 
-def codebreaker(evaluation_p):
+def codebreaker(evaluation_p: tuple):
     """
     L'argument evaluation_p est l'évaluation qu'on reçoit pour la dernière
     combinaison qu'on a proposée (et vaut None si c'est le premier coup de la

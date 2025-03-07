@@ -5,7 +5,6 @@ import random
 # pour s'assurer que le module est bien importé,  
 # peu importe comment l'application est exécutée avec Flask.  
 # Cela évite les erreurs liées aux imports absolus.  
-
 from . import common  # N'utilisez pas la syntaxe "form random import XXX"
 
 

@@ -28,34 +28,45 @@ def check_compatibility(codemaker_version: int, codebreaker_version: int):
     if codemaker_version == 0 and codebreaker_version == 2:
         raise ValueError("Incompatibilité détectée : codebreaker2 nécessite une évaluation complète et ne peut pas être utilisé avec codemaker0.")
 
-def play(codemaker_version: int, codebreaker_version: int, reset_solution = True, quiet = False) -> int:
+def play(codemaker_version: int, codebreaker_version: int, reset_solution=True, quiet = False, output=print, get_input=None) -> int:
     """
-    Joue une partie pour un codebreaker donné sur une solution déjà initialisée ou pas dans le module codemaker.
-    Le codebreaker est cependant réinitialisé pour chaque partie.
+    Joue une partie pour un codebreaker donné.
+    
+    c'est un mode automatique, get_input reste None et le codebreaker génère ses combinaisons.
     """
     check_compatibility(codemaker_version, codebreaker_version)
-    codemaker_module, codebreaker_module = get_codemaker_module(codemaker_version), get_codebreaker_module(codebreaker_version)
+    codemaker_module = get_codemaker_module(codemaker_version)
+    codebreaker_module = get_codebreaker_module(codebreaker_version)
 
-    # Permet de pouvoir comparer deux codebreaker sur la meme solution
     if reset_solution:
         codemaker_module.init()
+    codebreaker_module.init()
 
-    codebreaker_module.init()  # Réinitialisation du codebreaker
     ev = None
     nbr_of_try = 0
 
     if not quiet:
-        print('combinations de taille {}, couleurs disponibles {}'.format(common.LENGTH, common.COLORS))
+        output("Combinaisons de taille {} avec couleurs disponibles : {}".format(common.LENGTH, common.COLORS))
+
     while True:
-        combination = codebreaker_module.codebreaker(ev)
+        # Si get_input est défini, on l'utilise pour récupérer l'input,
+        # sinon, le codebreaker automatique génère sa combinaison.
+        if get_input is not None:
+            combination = get_input(ev)
+        else:
+            combination = codebreaker_module.codebreaker(ev)
+
         ev = codemaker_module.codemaker(combination)
         nbr_of_try += 1
+
         if not quiet:
-            print("Essai {} : {} ({},{})".format(nbr_of_try, combination, ev[0], ev[1]))
+            output("Essai {} : {} ({} bien placées, {} mal placées)".format(nbr_of_try, combination, ev[0], ev[1]))
+
         if ev[0] >= common.LENGTH:
             if not quiet:
-                print("Bravo ! Trouvé {} en {} essais".format(combination, nbr_of_try))
+                output("Bravo ! Trouvé {} en {} essais".format(combination, nbr_of_try))
             return nbr_of_try
+
 
 def play_log(codemaker_version: int, codebreaker_version: int, log_file: str, reset_solution = True, quiet = False) -> int:
     """
@@ -89,4 +100,10 @@ def play_log(codemaker_version: int, codebreaker_version: int, log_file: str, re
                     print("Bravo ! Trouvé {} en {} essais".format(combination, nbr_of_try))
                 return nbr_of_try
 
-play_log(1, 2, "random")
+
+# Pour ne pas executer ces fonctions lors des imports 
+if __name__ == "__main__":
+    print("Ce fichier play.py est exécuté directement.")
+    # appelle des fonctions ici 
+    play_log(1, 2, "random")
+

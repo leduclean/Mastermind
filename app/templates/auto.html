@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Jeu du Mastermind - Version Humain</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/human_player.css') }}"
+</head>
+<style>
+    :root {
+        --length: {{ lenght }};
+        --nbr_of_line: {{ nbr_of_line }};
+    }
+</style>
+<body>
+    <h1>Jeu du Mastermind</h1>
+    <h2>Voici les combinaison testées</h2>
+
+    <div class="mastermind-board">
+        {% for number in range(1,lenght+1)%}
+            <div class = "colonne">
+                {% for line in range(nbr_of_line, 0, -1)%}
+                    <div class="slot" id="slot-{{line}}-{{number}}"></div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+
+
+
+    <div class="container">
+        <div class="color-options-container">
+            {% for color in colors_name%}
+                <div class="color-option {{ color }}" ></div>
+            {% endfor %}
+        </div>
+    </div>
+
+
+    <script> var attempts = {{attempts | tojson}};
+    </script>
+
+
+    <script src="{{ url_for('static', filename='js/auto.js') }}">
+    </script>
+</body>
+</html>

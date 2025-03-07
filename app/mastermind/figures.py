@@ -1,5 +1,5 @@
 
-import play
+from . import play
 import matplotlib.pyplot as plt
 
 # TO DO : passer les commentaires en anglais 
@@ -43,5 +43,6 @@ def show_gain(codemaker_version: int, version1: int, version2: int, nbr_of_game:
     plt.show()
 
 # Exemples d'utilisation :
-# show_histogram(1, 2, 100)  # Fonctionnera
-show_gain(1, 1, 2, 100)     # Lève une erreur si codemaker0 est utilisé avec codebreaker2
+if __name__ == "__main__":   
+    # show_histogram(1, 2, 100)  # Fonctionnera
+    show_gain(1, 1, 2, 100)     # Lève une erreur si codemaker0 est utilisé avec codebreaker2

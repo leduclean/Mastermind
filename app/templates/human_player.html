@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Jeu du Mastermind - Version Humain</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/human_player.css') }}" </head>
+    <style>
+        :root {
+            --length: {
+                    {
+                    length
+                }
+            }
+
+            ;
+
+            --nbr-of-line: {
+                    {
+                    nbr_of_line
+                }
+            }
+
+            ;
+        }
+    </style>
+
+<body>
+    <nav>
+        <ul>
+            <li>
+                <a href="{{ url_for('main.index') }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="12" height="12"
+                        fill="currentColor">
+                        <path
+                            d="M19 21H5C4.44772 21 4 20.5523 4 20V11L1 11L11.3273 1.6115C11.7087 1.26475 12.2913 1.26475 12.6727 1.6115L23 11L20 11V20C20 20.5523 19.5523 21 19 21ZM6 19H18V9.15745L12 3.7029L6 9.15745V19Z">
+                        </path>
+                    </svg>
+                </a>
+            </li>
+            <li> Auto mode </li>
+        </ul>
+
+        <div class="logo">
+            <strong> By Simon and Leandre</strong>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <h1 onclick="resetGame()">Mastermind</h1>
+    </div>
+
+
+    <div class="choice">
+        <h2>Choose a color and drag in the slot</h2>
+        <ul>
+            {% for color in colors_name%}
+            <li class="color-option {{ color }}"  onclick="changeColor('{{color}}')"></li>
+            {% endfor %}
+        </ul>
+    </div>
+
+
+
+    <div class="mastermind-container">
+        <div class="board-container">
+          <!-- Flèche positionnée par rapport au board -->
+          <div class="arrow-container">
+            <div class="masterarrow">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                <path d="M13.1717 12.0007L8.22192 7.05093L9.63614 5.63672L16.0001 12.0007L9.63614 18.3646L8.22192 16.9504L13.1717 12.0007Z"></path>
+              </svg>  
+            </div>
+          </div>
+          
+          <!-- Colonnes du board -->
+          {% for number in range(1, length + 1) %}
+            <div class="colonne">
+              {% for line in range(nbr_of_line, 0, -1) %}
+                <div class="slot" id="slot-{{line}}-{{number}}"></div>
+              {% endfor %}
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
+    <div id="container">
+        <form method="POST" action="{{ url_for('main.game') }}">
+            <input type="hidden" id="combination" name="combination">
+            <button class="submit" type="submit" id="submit">
+                <span class="circle" aria-hidden="true">
+                    <span class="icon arrow"></span>
+                </span>
+                <span class="button-text">Submit</span>
+            </button>
+        </form>
+
+        </button>
+    </div>
+
+
+
+
+
+
+
+
+    <div class="container">
+        <div class="message">
+            {% if message %}
+            <p>{{ message }}</p>
+            {% endif %}
+
+            {% if win_message %}
+            <p>{{ win_message }}, {{attempts}}</p>
+            {% else %}
+            {% if cplaced is not none and iplaced is not none %}
+            <p>L'évaluation est: {{ cplaced }} bien placés, {{ iplaced }} mal placés.</p>
+            {% else %}
+            <p>Aucune évaluation disponible pour le moment.</p>
+            {% endif %}
+            {% endif %}
+        </div>
+    </div>
+
+
+
+
+    <script>
+        var nbr_of_line = {{ nbr_of_line | tojson}};
+        var length = {{ length | tojson}};
+    </script>
+    <script src="{{ url_for('static', filename='js/human_player.js') }}">
+    </script>
+</body>
+
+</html>

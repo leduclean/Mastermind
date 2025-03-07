@@ -1,16 +1,26 @@
 from flask import Flask
-from app.assets import compile_assets
-import os 
+from  app.watch_scss import watch_scss
+import os
+import threading
+
+
+def start_scss_thread():
+    thread = threading.Thread(target = watch_scss, daemon=True)
+    thread.start()
+
 
 def create_app():
-    # Crée une instance de Flask.
     app = Flask(__name__)
-    compile_assets(app)
-    # Chargement de configurations (exemple d'une clé secrète)
-    app.config['SECRET_KEY'] = 'ton_secret_key'
+    app.debug = True
+    
+    # Lancer le watcher SCSS en mode debug
+    if app.debug:
+        start_scss_thread()
 
-    # Enregistrement des routes ou blueprints
+    app.config['SECRET_KEY'] = 'ton_secret_key'
     from app.routes import main
     app.register_blueprint(main)
-
     return app
+
+from app import create_app
+app = create_app()

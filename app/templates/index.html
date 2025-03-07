@@ -6,7 +6,16 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <h1>Bienvenue sur Mastermind !</h1>
-    <!-- Ici, tu pourras intégrer ton interface pour le jeu -->
+    <h1>Bienvenue sur Mastermind</h1>
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('main.game', mode='auto') }}">Play in auto mode</a>
+            <li><a href="{{ url_for('main.game', mode='human') }}">Play in human mode</a>
+            <li>I love</li>
+        </ul>
+    </nav>
+    <div class="images">
+        <p></p>
+    </div>
 </body>
 </html>

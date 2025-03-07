@@ -12,6 +12,7 @@ import re
 import traceback
 
 
+
 def q1():
     if not os.path.isfile("common.py"):
         print("q1: fichier 'common.py' non trouvé")
@@ -23,8 +24,8 @@ def q1():
                     if re.search('^ *from +common +import', l):
                         print('fichier {}: la syntaxe "from common import XXX" ne doit pas être utilisée'.format(pf))
                         return False
-    import common
     global common
+    from . import common
     if common.LENGTH != 4:
         print("Attention, common.LENGTH a été modifié, on remet la valeur par défaut (4) pour ces tests")
         common.LENGTH = 4

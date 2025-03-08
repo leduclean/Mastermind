@@ -55,7 +55,7 @@
         <h2>Choose a color and drag in the slot</h2>
         <ul>
             {% for color in colors_name%}
-            <li class="color-option {{ color }}"  onclick="changeColor('{{color}}')"></li>
+            <li class="color-option {{ color }}" draggable="true"></li>
             {% endfor %}
         </ul>
     </div>

@@ -2,18 +2,6 @@
 let currentLine = localStorage.getItem('currentLine') ? parseInt(localStorage.getItem('currentLine')) : 1;
 let currentSlot = 1;  // Slot actuellement sélectionné
 
-// Fonction qui change la couleur d'un slot et la sauvegarde dans localStorage
-function changeColor(color) {
-    const slotId = `slot-${currentLine}-${currentSlot}`;
-    const slot = document.getElementById(slotId);
-    if (slot) {
-        slot.style.backgroundColor = color;
-        localStorage.setItem(slotId, color);
-        document.getElementById("combination").value = getCombination();
-    } else {
-        console.error(`Element with ID ${slotId} not found.`);
-    }
-}
 
 // Fonction pour construire la combinaison actuelle en utilisant la première lettre de chaque couleur
 function getCombination() {
@@ -46,20 +34,9 @@ function getCombination() {
     return combination.trim();
 }
 
-// Gestion du changement de slot lors du clic sur un slot (pour définir currentSlot)
-document.querySelectorAll('.slot').forEach(function (slotElement) {
-    slotElement.addEventListener('click', function () {
-        // Extrait le numéro du slot depuis l'ID qui est au format "slot-{line}-{slot}"
-        const parts = slotElement.id.split('-');
-        if (parts.length === 3) {
-            currentSlot = parseInt(parts[2]);
-        }
-    });
-});
-
 // Au chargement de la page, restaure les couleurs de toutes les lignes déjà soumises
 document.addEventListener('DOMContentLoaded', function() {
-    console.log("Restoration from localStorage, currentLine:", currentLine);
+    // console.log("Restoration from localStorage, currentLine:", currentLine);
     // On restaure pour toutes les lignes déjà soumises (de 1 à currentLine - 1)
     for (let line = 1; line < currentLine; line++) {
         for (let slot = 1; slot <= length; slot++) {
@@ -116,3 +93,66 @@ if (combinationButton) {
         currentSlot = 1;
     });
 }
+
+// Déclenché au début du drag and drop 
+function handleDragStart(event) {
+    // On envoie le nom de la couleur; ici on suppose que la classe contient le nom de la couleur
+    // Si votre élément a plusieurs classes, vous pouvez utiliser event.target.classList pour sélectionner la bonne
+    event.dataTransfer.setData("text/plain", event.target.classList[1]); 
+}
+
+// Attacher l'événement sur toutes les options de couleur
+document.querySelectorAll('.color-option').forEach(function(colorElement) {
+    colorElement.addEventListener('dragstart', handleDragStart);
+});
+
+// Fonction pour autoriser le drop sur un slot
+function handleDragOver(event) {
+    event.preventDefault(); // Nécessaire pour autoriser le drop
+}
+
+// Gestionnaire de l'événement dragover (pour autoriser le drop)
+function handleDragOver(event) {
+    const slot = event.currentTarget;
+    // Extraction du numéro de ligne depuis l'id (format "slot-{line}-{number}")
+    const parts = slot.id.split('-');
+    const slotLine = parseInt(parts[1]);
+    // Si le slot n'appartient pas à la ligne courante, on n'autorise pas le drop
+    if (slotLine !== currentLine) {
+        return;
+    }
+    event.preventDefault(); // Nécessaire pour permettre le drop
+}
+
+// Gestionnaire de l'événement drop
+function handleDrop(event) {
+    const slot = event.currentTarget;
+    const parts = slot.id.split('-');
+    const slotLine = parseInt(parts[1]);
+    // Vérifie que le drop se fait sur un slot de la currentLine
+    if (slotLine !== currentLine) {
+        console.error("Drop interdit sur une ligne inactive.");
+        return;
+    }
+    event.preventDefault();
+    const color = event.dataTransfer.getData("text/plain");
+    // console.log("Dropped color:", color);
+    if (color) {
+        // Appliquer la couleur et lancer l'animation
+        slot.style.backgroundColor = color;
+        slot.classList.remove("animate-drop");
+        // Forcer le reflow pour redémarrer l'animation
+        void slot.offsetWidth;
+        slot.classList.add("animate-drop");
+
+        // Sauvegarde en localStorage et mise à jour de la combinaison
+        localStorage.setItem(slot.id, color);
+        document.getElementById("combination").value = getCombination();
+    }
+}
+
+// Attacher les événements sur chaque slot
+document.querySelectorAll('.slot').forEach(function(slotElement) {
+    slotElement.addEventListener('dragover', handleDragOver);
+    slotElement.addEventListener('drop', handleDrop);
+});

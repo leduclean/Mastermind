@@ -68,42 +68,73 @@ def play(codemaker_version: int, codebreaker_version: int, reset_solution=True, 
             return nbr_of_try
 
 
-def play_log(codemaker_version: int, codebreaker_version: int, log_file: str, reset_solution = True, quiet = False) -> int:
+class FileLogger:
     """
-    Joue une partie pour un codebreaker donné sur la solution déjà initialisée dans le module codemaker.
+    Logger qui écrit les messages dans un fichier texte.
+    """
+    def __init__(self, log_file: str):
+        # Le fichier log est construit à partir du chemin et du nom fourni.
+        self.log_file = f"app\\logs\\{log_file}.txt"
+    
+    def __call__(self, message: str):
+        # Ouvre le fichier en mode "append" pour ajouter le message avec un saut de ligne.
+        with open(self.log_file, "a") as f:
+            f.write(message + "\n")
+
+
+def play_log(codemaker_version, codebreaker_version: int, log_file: str, reset_solution=True, quiet=False, output_func = None, human_solution = False) -> int:
+    """
+    Joue une partie pour un codebreaker sur la solution déjà initialisée.
     Le codebreaker est réinitialisé pour chaque partie, tandis que le codemaker conserve la solution.
+    
+    La sortie (les logs) est réalisée via la fonction d'output passée en paramètre.
+    Par défaut, si aucune fonction n'est fournie, les logs sont écrits dans un fichier texte à l'aide de FileLogger.
+        int: nombre d'essais effectués.
     """
     check_compatibility(codemaker_version, codebreaker_version)
-    codemaker_module, codebreaker_module = get_codemaker_module(codemaker_version), get_codebreaker_module(codebreaker_version)
-
     
-    # Permet de pouvoir comparer deux codebreaker sur la meme solution
-    if reset_solution:
-        codemaker_module.init()
-    codebreaker_module.init()  # Réinitialisation du codebreaker
+    if not human_solution:
+        codemaker_module = get_codemaker_module(codemaker_version) 
+            # Réinitialisation de la solution et du codebreaker
+        if reset_solution:
+            codemaker_module.init()
+
+    codebreaker_module = get_codebreaker_module(codebreaker_version)
+    
+
+
+    codebreaker_module.init()
+
+    if output_func is None:
+        output_func = FileLogger(log_file)
+    
     ev = None
-    nbr_of_try = 0 
-        ##### Seule chose qui change du programme play
-    with open(f"app\logs\{log_file}.txt", 'w') as log:
+    nbr_of_try = 0
+    
+    if not quiet:
+        print('combinaisons de taille {}, couleurs disponibles {}'.format(common.LENGTH, common.COLORS))
+    
+    while True:
+        combination = codebreaker_module.codebreaker(ev)
+        ev = common.evaluation(combination, human_solution) if human_solution else codemaker_module.codemaker(combination) 
+        nbr_of_try += 1
+        
+        # Enregistrement des logs via output_func
+        output_func(combination)
+        output_func(f"{ev[0]},{ev[1]}")
+        
         if not quiet:
-            print('combinations de taille {}, couleurs disponibles {}'.format(common.LENGTH, common.COLORS))
-        while True:
-            combination = codebreaker_module.codebreaker(ev)
-            ev = codemaker_module.codemaker(combination)
-            nbr_of_try += 1
-            log.write(combination + "\n")
-            log.write(f"{ev[0]},{ev[1]} \n")
+            print("Essai {} : {} ({},{})".format(nbr_of_try, combination, ev[0], ev[1]))
+        
+        if ev[0] >= common.LENGTH:
             if not quiet:
-                print("Essai {} : {} ({},{})".format(nbr_of_try, combination, ev[0], ev[1]))
-            if ev[0] >= common.LENGTH:
-                if not quiet:
-                    print("Bravo ! Trouvé {} en {} essais".format(combination, nbr_of_try))
-                return nbr_of_try
+                print("Bravo ! Trouvé {} en {} essais".format(combination, nbr_of_try))
+            return nbr_of_try
 
 
 # Pour ne pas executer ces fonctions lors des imports 
 if __name__ == "__main__":
     print("Ce fichier play.py est exécuté directement.")
     # appelle des fonctions ici 
-    play_log(1, 2, "random")
+    play_log(1, 2, "nul")
 

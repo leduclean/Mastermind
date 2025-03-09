@@ -3,13 +3,17 @@ $bg: #f3f8fa;
 $white: #fff;
 $grey: rgb(63, 60, 60);
 
+a {
+  all: unset; /* Supprime tous les styles par défaut */
+}
+
 @font-face {
   font-family: 'kanit';
   src: url('../fonts/kanit-bold.woff2') format('woff2'),
     url('../fonts/kanit/kanit-bold.woff') format('woff');
 }
 
-body {
+body { 
   background-color: black;
   color: white;
   font-family: 'kanit', sans-serif;
@@ -76,13 +80,13 @@ nav {
 
   h2 {
     padding: 0;  
-    margin: 0;
+    margin-bottom: 1rem;
+
 
   }
 
 
   ul {
-    padding: 0;
     margin: 0;
     list-style: none;
     display: flex;
@@ -287,50 +291,101 @@ button.submit {
         gap: 1rem;
       }
     }
+
+  .evaluation-column{ 
+      display: flex;
+      flex-direction: column; 
+      position: absolute;
+      bottom: 5px;    // Place la flèche en bas du board
+      left: 110%;
+      [class^="evaluation-area-"]{ 
+        margin-top: 0.62rem;
+        margin-bottom: 0.57rem;
+        list-style: none;
+        display: flex; 
+        align-items: center;
+        flex-direction: column;
+        justify-content: space-between; 
+        width: fit-content;
+        background-color: $grey;
+        border-radius: 30%;
+        
+        ul {
+          list-style: none; 
+          display: flex;
+          align-items: center;
+          justify-content: space-between; 
+          width: fit-content;
+          padding: 0;
+          margin: 1px;
+          
+          .evaluation-slot{
+            width: 12px;
+            height: 12px;
+            background: radial-gradient(
+              circle, 
+              rgba(34, 34, 34, 1) 0%,
+              rgba(66, 63, 63, 0.5968) 0%,
+              rgba(38, 37, 37, 1) 100%
+            );
+            border-radius: 50px;
+            margin: 2px;
+
+          }
+        }
+      }
+    }
   }
 }
 
 
+/* code maker  */
+.solution-container{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 5rem; 
+  margin-bottom: 2rem;
+  
+  ul{
+    display: flex;
+    justify-content: space-between; 
+    list-style: none;
+    padding: 10px;
+    background-color: $grey;
+    border-radius: 50%;
+    padding: 20px;
 
-/* Ajoutez des couleurs ici */
-.red {
-  background-color: red;
-}
 
-.blue {
-  background-color: blue;
-}
 
-.green {
-  background-color: green;
-}
+    .slot{ 
+      width: 60px;
+      height: 60px;  
+      background: radial-gradient(
+        circle,
+        rgba(34, 34, 34, 1) 0%,
+        rgba(66, 63, 63, 0.5968) 0%,
+        rgba(38, 37, 37, 1) 100% 
+      );
+      border-radius: 50px;
+      gap: 1rem;
+      margin: 5px; 
 
-.yellow {
-  background-color: yellow;
-}
 
-.black {
-  background-color: black;
-}
+    }
+  }
+}  
 
-.white {
-  background-color: white;
-}
 
-.brown {
-  background-color: brown;
-}
-
-.purple {
-  background-color: purple;
-}
-
-.grey {
-  background-color: grey;
-}
-
-.orange {
-  background-color: orange;
+.main-content-container{
+  display: flex; 
+  flex-direction: column;
+  align-items: center; 
+  justify-content: space-between;
+ 
+  &:first-child{
+    margin-top: 1rem;
+  } 
 }
 
 @keyframes bounceArrow {

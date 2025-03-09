@@ -5,8 +5,8 @@ import sass
 scss_dir = 'app/static/scss'
 css_dir = 'app/static/css'
 
-input_file = os.path.join(scss_dir, 'human_player.scss')
-output_file = os.path.join(css_dir, 'human_player.css')
+input_file = os.path.join(scss_dir, 'mastermind.scss')
+output_file = os.path.join(css_dir, 'mastermind.css')
 
 # Fonction pour compiler le SCSS en CSS
 def watch_scss():

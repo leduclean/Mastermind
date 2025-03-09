@@ -1,6 +1,7 @@
 __pycache__/
 venv/
 *.txt
+!requirements.txt
 *.pdf  
 instance/
 .env

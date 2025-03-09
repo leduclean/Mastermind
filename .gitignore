@@ -6,4 +6,3 @@ venv/
 instance/
 .env
 .webassets-cache/
-app/static/css/*.css

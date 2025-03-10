@@ -1,12 +1,9 @@
-// Vérifie que le script est chargé
-console.log("auto.js chargé !");
 
-// Vérifie que la variable attempts est bien définie
-console.log("attempts:", attempts);
-
+import { fillSlot } from './basics.js';
 // Variables globales
 let currentAttempt = 1;
 let totalAttempts = attempts.length;
+
 const letterToColor = {
     'R': 'red',    // Rouge
     'B': 'blue',   // Bleu
@@ -19,16 +16,21 @@ const letterToColor = {
 };
 
 // Fonction pour mettre à jour les evaluation-slot
+
+
+
+    /* Updates the evaluation slots for a given line.
+  * Red slots indicate correct placement and white slots indicate misplaced colors.
+  * 
+  * @param { number } line - The line number to update.
+  * @param { number } cplaced - Number of correctly placed colors.
+  * @param { number } iplaced - Number of misplaced colors.
+  */
 function updateEvaluationSlots(line, cplaced, iplaced) {
     let slots = document.querySelectorAll(`.evaluation-area-${line} .evaluation-slot`);
-
-    if (!slots.length) {
-        console.warn(`Aucun slot trouvé pour la ligne ${line}`);
-        return;
-    }
-
     let index = 0;
 
+    // Met à jour les slots pour les couleurs bien placées
     for (let i = 0; i < cplaced; i++) {
         if (index < slots.length) {
             slots[index].style.backgroundColor = "red";
@@ -37,6 +39,7 @@ function updateEvaluationSlots(line, cplaced, iplaced) {
         }
     }
 
+    // Met à jour les slots pour les couleurs mal placées
     for (let i = 0; i < iplaced; i++) {
         if (index < slots.length) {
             slots[index].style.backgroundColor = "white";
@@ -45,7 +48,6 @@ function updateEvaluationSlots(line, cplaced, iplaced) {
         }
     }
 }
-
 // Fonction pour afficher les tentatives successives
 function displayNextAttempt() {
     console.log("displayNextAttempt appelée, currentAttempt:", currentAttempt);
@@ -63,37 +65,47 @@ function displayNextAttempt() {
         for (let i = 0; i < combination.length; i++) {
             let slot = document.getElementById(`slot-${currentAttempt}-${i + 1}`);
             if (slot) {
-                console.log(`Mise à jour du slot ${i + 1} avec la couleur`, combination[i]);
-                slot.style.backgroundColor = letterToColor[combination[i]];
+                let color = letterToColor[combination[i]];
+                fillSlot(slot, color);
+                localStorage.setItem(slot, color);
             } else {
                 console.warn(`Slot slot-${currentAttempt}-${i + 1} introuvable`);
             }
         }
 
         // Mettre à jour les slots d'évaluation
-        updateEvaluationSlots(currentAttempt, cplaced, iplaced);
+        updateEvaluationSlots(currentAttempt , cplaced, iplaced);
 
         // Mettre à jour la position de la flèche
         const arrow = document.querySelector(".arrow-container");
         if (arrow) {
-            const lineHeight = 55; // Hauteur d'une ligne (slot + gap)
+            const lineHeight = 65; // Hauteur d'une ligne (slot + gap)
             const translationY = (currentAttempt - 1) * lineHeight;
             arrow.style.transform = `translateY(-${Math.min(translationY, (totalAttempts - 1) * lineHeight)}px)`;
         }
 
-        // Restaurer les couleurs des slots d'évaluation depuis le localStorage
+
+
+        for (let i = 0; i < combination.length; i++) {
+            let slot = document.getElementById(`slot-${currentAttempt - 1}-${i + 1}`);
+            if (slot) {
+                slot.classList.add("onload");
+                slot.classList.remove("filled");
+            }
+        }
         let slots = document.querySelectorAll(`.evaluation-area-${currentAttempt} .evaluation-slot`);
         slots.forEach((slot, index) => {
             let savedColor = localStorage.getItem(`evaluation-slot-${currentAttempt}-${index}`);
             if (savedColor) {
-                slot.style.backgroundColor = savedColor;
+                fillSlot(slot, savedColor, true)
+                console.log('random')
             }
         });
 
         // Passer à l'essai suivant après un délai
         currentAttempt++;
         setTimeout(displayNextAttempt, 3000);
-    } 
+    }
 }
 
 function removeResetParam() {

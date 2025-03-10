@@ -97,13 +97,27 @@ nav {
     border-radius: 30%;
     padding: 10px;
  
-    .color-option {
+    .color-option { 
       width: 30px;
       height: 30px;
       margin: 5px; 
       cursor: pointer; 
       border-radius: 50%;
+      background: linear-gradient(145deg, #333, #444);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      background-blend-mode: overlay;
+
+      &:hover {
+        transform: scale(1.05);
+        filter: brightness(1.1); 
+        background: #d5d5d5;
+      }
+      &:active {
+        transform: scale(0.98);
+      }
     }
+
   }
 }
 
@@ -278,18 +292,6 @@ button.submit {
       grid-column-end: var(--length);
       flex-direction: column-reverse;
 
-      .slot {
-        width: 50px;
-        height: 50px;
-        background: radial-gradient(
-          circle,
-          rgba(34, 34, 34, 1) 0%,
-          rgba(66, 63, 63, 0.5968) 0%,
-          rgba(38, 37, 37, 1) 100%
-        );
-        border-radius: 50px;
-        gap: 1rem;
-      }
     }
 
   .evaluation-column{ 
@@ -299,15 +301,15 @@ button.submit {
       bottom: 5px;    // Place la flèche en bas du board
       left: 110%;
       [class^="evaluation-area-"]{ 
-        margin-top: 0.62rem;
-        margin-bottom: 0.57rem;
+        margin-top: 0.9rem;
+        margin-bottom: 0.9rem;
         list-style: none;
         display: flex; 
         align-items: center;
         flex-direction: column;
-        justify-content: space-between; 
-        width: fit-content;
-        background-color: $grey;
+        justify-content: space-between;  
+        width: fit-content; 
+        background-color: $grey; 
         border-radius: 30%;
         
         ul {
@@ -336,6 +338,68 @@ button.submit {
       }
     }
   }
+}
+
+
+
+.slot {
+  width: 50px;
+  height: 50px;
+  background: radial-gradient(circle, #222 20%, #111 100%);
+  border-radius: 50%;
+  display: flex; 
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease-in-out;
+  position: relative;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.1); /* Bordure discrète */
+  background-blend-mode: overlay;
+  --slot-color: #ffffff;
+  --slot-color-dark: #cccccc;
+  margin: 5px;
+}
+
+/* Slot rempli avec couleur dynamique */ 
+.slot.filled {
+  background: linear-gradient(135deg, var(--slot-color), var(--slot-color-dark));
+  border: 2px solid var(--slot-color-dark, rgba(255, 255, 255, 0.4));
+  box-shadow: 0 0 12px var(--slot-color, rgba(255, 255, 255, 0.6)); /* Glow moderne */
+  transform: scale(1.05);
+
+}
+.slot.onload{
+  background: linear-gradient(135deg, var(--slot-color), var(--slot-color-dark));
+  border: 2px solid var(--slot-color-dark, rgba(255, 255, 255, 0.4));
+  transform: scale(1.05);
+}
+/* Effet lumineux interne */
+.slot.filled::before {
+  content: "";
+  position: absolute;
+  width: 120%;
+  height: 120%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+  top: -10%;
+  left: -10%;
+  z-index: 0;
+  opacity: 0.4;
+}
+
+/* Animation d’apparition */
+@keyframes pop {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.slot.filled {
+  animation: pop 0.2s ease-out;
 }
 
 
@@ -377,6 +441,7 @@ button.submit {
 }  
 
 
+
 .main-content-container{
   display: flex; 
   flex-direction: column;
@@ -397,18 +462,4 @@ button.submit {
   }
 }
 
-.animate-drop {
-  animation: dropEffect 0.5s ease-out;
-}
-
-@keyframes dropEffect {
-  0% {
-      transform: scale(0.5);
-      opacity: 0; 
-  }
-  100% {
-      transform: scale(1);
-      opacity: 1;
-  }
-}
 

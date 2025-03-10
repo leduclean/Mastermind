@@ -1,10 +1,18 @@
-// Récupère la combinaison en lisant les slots
+
 function getCombination() {
     let combination = '';
     const colorToLetter = {
-        'red': 'R', 'blue': 'B', 'green': 'V', 'yellow': 'J',
-        'black': 'N', 'grey': 'G', 'orange': 'O', 'brown': 'M'
-    };
+        'firebrick': 'R',    
+        'royalblue': 'B',    
+        'limegreen': 'V',    
+        'yellow': 'J',      
+        'darkorange': 'O',   
+        'black': 'N',        
+        'sienna': 'M',       
+        'dimgray': 'G'       
+      };
+      
+    
 
     // On parcourt tous les slots
     document.querySelectorAll('.slot').forEach(function(slot) {
@@ -46,12 +54,13 @@ function handleDrop(event) {
     const color = event.dataTransfer.getData("text/plain");
     
     if (color) {
-        slot.style.backgroundColor = color;
+        slot.classList.add('filled');
         slot.classList.remove("animate-drop");
-        // Forcer le reflow pour redémarrer l'animation
+
         void slot.offsetWidth;
         slot.classList.add("animate-drop");
         document.getElementById("solution").value = getCombination();
+        
     }
 }
 

@@ -1,18 +1,19 @@
-from flask import Blueprint, render_template, request, url_for, session, redirect
+from flask import Blueprint, render_template, request, url_for, session, redirect, send_from_directory
 from app.mastermind import *
 
 
 color_dic = {
-    'R': 'red',          # Rouge
-    'B': 'blue',         # Bleu
-    'V': 'green',        # Vert
-    'J': 'yellow',       # Jaune
-    'O': 'orange',       # Orange
-    'N': 'black',
-    'M': 'brown',
-    'G': 'grey'
-
+  'R': 'firebrick',   # Rouge vif et contrasté
+  'B': 'royalblue',   # Bleu intense
+  'V': 'limegreen',   # Vert éclatant
+  'J': 'yellow',      # Jaune vif
+  'O': 'darkorange',  # Orange profond
+  'N': 'black',       # Noir pour un fort contraste
+  'M': 'sienna',      # Brun chaleureux
+  'G': 'gray'      # Gris moderne
 }
+
+
 
 
 # Création d'un blueprint
@@ -177,3 +178,7 @@ def human_codemaker():
         length = length,
         colors_name = colors_name
     )
+
+@main.route('/static/js/<path:filename>')
+def serve_js(filename):
+    return send_from_directory('static/js', filename, mimetype='application/javascript')

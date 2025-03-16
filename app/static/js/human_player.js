@@ -12,7 +12,7 @@ let currentSlot = 1; // Currently selected slot
 // are assumed to be defined elsewhere in your application.
 
 
-import {fillSlot} from './basics.js';
+import {fillSlot, updateArrow} from './basics.js';
 
 /**
  * -----------------------------
@@ -228,25 +228,20 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // Adjust the arrow indicator's position based on the current line
-  const arrow = document.querySelector(".arrow-container");
-  if (arrow) {
-    const lineHeight = 65;
-    const translationY = (currentLine - 1) * lineHeight;
-    arrow.style.transform = `translateY(-${Math.min(translationY, (nbr_of_line - 1) * lineHeight)}px)`;
-  }
-
-  // Check for a reset parameter in the URL to reset the game state
-  const params = new URLSearchParams(window.location.search);
-  if (params.get('reset') === 'true') {
-    resetGame();
-    removeResetParam();
-  }
-});
+  updateArrow(currentLine)
 
 function resetGame() {
     localStorage.clear();
     console.log('clear')
 }
 
-window.resetGame = resetGame;  // 👈 Rend la fonction accessible dans l'HTML
+window.resetGame = resetGame;  
+
+  // Check for a reset parameter in the URL to reset the game state
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('reset') === 'true') {
+    resetGame();
+    console.log('toreset')
+    removeResetParam();
+  }
+});

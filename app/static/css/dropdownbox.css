@@ -1,0 +1,106 @@
+@charset "UTF-8";
+.dropdown-wrapper {
+  width: 100%;
+  text-align: center;
+  margin: 3rem 0; }
+
+.sec-center {
+  display: inline-block;
+  text-align: left;
+  position: relative;
+  z-index: 200; }
+
+/* Masquer les inputs */
+input[type="checkbox"] {
+  position: absolute;
+  left: -9999px;
+  opacity: 0;
+  pointer-events: none; }
+
+.dropdown + label {
+  position: relative;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 2;
+  height: 50px;
+  width: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #025573;
+  cursor: pointer;
+  color: #F4E1C1;
+  box-shadow: 0 12px 35px 0 rgba(255, 235, 167, 0.15);
+  transition: all 200ms linear;
+  margin-top: 10px;
+  padding: 0 1rem;
+  border-radius: 3%; }
+
+.dropdown + label .uil {
+  transition: transform 200ms linear; }
+
+.dropdown:checked + label .uil {
+  transform: rotate(180deg); }
+
+.section-dropdown a,
+.dropdown-sub + label {
+  color: white;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  transition: all 200ms linear;
+  background-color: transparent;
+  border: none;
+  margin: 5px;
+  border-radius: 4px; }
+
+/* Hover identique */
+.section-dropdown a:hover,
+.dropdown-sub + label:hover {
+  color: #F4E1C1;
+  background-color: #025573; }
+
+/* Rotation de l'icône "plus" dans les sous-dropdowns */
+.dropdown-sub + label .uil {
+  transition: transform 200ms linear; }
+
+.dropdown-sub:checked + label .uil {
+  transform: rotate(45deg); }
+
+/* Conteneur du menu dropdown principal */
+.section-dropdown {
+  position: absolute;
+  top: 70px;
+  /* Augmente la distance entre le dropdown principal et le menu */
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  width: 220px;
+  background-color: #3f3c3c;
+  border-radius: 4px;
+  box-shadow: 0 14px 35px 0 rgba(9, 9, 12, 0.4);
+  padding: 10px;
+  /* Augmente l'espace intérieur */
+  opacity: 0;
+  pointer-events: none;
+  transition: all 200ms linear; }
+
+/* Afficher le menu principal quand le dropdown est activé */
+.dropdown:checked ~ .section-dropdown {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0); }
+
+/* Chaque sous-dropdown est contenu dans .dropdown-section */
+/* Masquer la sous-section par défaut */
+.dropdown-section .section-dropdown-sub {
+  display: none;
+  flex-direction: column;
+  padding-left: 20px;
+  margin-top: 10px;
+  /* Augmente l'espace entre les sous-dropdowns */ }
+
+/* Afficher la sous-section associée à la checkbox via le combinator adjacent */
+.dropdown-section .dropdown-sub:checked + label + .section-dropdown-sub {
+  display: flex; }

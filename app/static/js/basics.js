@@ -98,3 +98,12 @@ export function fillSlot(slotElement, color, onload = false) {
   }
 }
 
+export function updateArrow(currentLine){
+  // Adjust the arrow indicator's position based on the current line
+  const arrow = document.querySelector(".arrow-container");
+  if (arrow) {
+    const lineHeight = 67;
+    const translationY = (currentLine - 1) * lineHeight;
+    arrow.style.transform = `translateY(-${Math.min(translationY, (nbr_of_line - 1) * lineHeight)}px)`;
+  }
+}

@@ -55,7 +55,8 @@ nav {
   margin-bottom: 10px; }
   .choice h2 {
     padding: 0;
-    margin-bottom: 1rem; }
+    margin-bottom: 0.5rem;
+    justify-content: center; }
   .choice ul {
     margin: 0;
     list-style: none;
@@ -311,11 +312,7 @@ button.submit {
     padding: 20px; }
     .solution-container ul .slot {
       width: 60px;
-      height: 60px;
-      background: radial-gradient(circle, #222222 0%, rgba(66, 63, 63, 0.5968) 0%, #262525 100%);
-      border-radius: 50px;
-      gap: 1rem;
-      margin: 5px; }
+      height: 60px; }
 
 .main-content-container {
   display: flex;

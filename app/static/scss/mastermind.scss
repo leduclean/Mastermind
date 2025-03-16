@@ -80,8 +80,8 @@ nav {
 
   h2 {
     padding: 0;  
-    margin-bottom: 1rem;
-
+    margin-bottom: 0.5rem;
+    justify-content: center;
 
   }
 
@@ -425,17 +425,6 @@ button.submit {
     .slot{ 
       width: 60px;
       height: 60px;  
-      background: radial-gradient(
-        circle,
-        rgba(34, 34, 34, 1) 0%,
-        rgba(66, 63, 63, 0.5968) 0%,
-        rgba(38, 37, 37, 1) 100% 
-      );
-      border-radius: 50px;
-      gap: 1rem;
-      margin: 5px; 
-
-
     }
   }
 }  

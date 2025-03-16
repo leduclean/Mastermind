@@ -50,6 +50,7 @@ def human_mode(codemakerversion):
     # Initialisation
     if codemakerversion != "human":
         codemaker = get_codemaker_module(codemakerversion)
+
     if request.method == 'GET':
         session['nbr_of_try'] = 0
         if codemakerversion != "human":
@@ -73,14 +74,11 @@ def human_mode(codemakerversion):
         erreur = human_codebreaker.verif_combination(combination)
 
         # Si l'utilisateur a fait une erreur dans la combinaison
-        if erreur:
+        if erreur: # gerer le message d'erreur 
             message = erreur
         else:
-            message = f"Combination accepted: {combination}"
-
             # Évaluation de la combinaison
-            (cplaced, iplaced), nbr_of_try = codemaker.codemaker(combination), get_nbr_of_try()
-            print(cplaced, iplaced)
+            (cplaced, iplaced), nbr_of_try = common.evaluation(combination, solution), get_nbr_of_try()
             # Si la combinaison est correcte, affichage du message de victoire
             if cplaced >= common.LENGTH:
                 win_message = f"Bravo ! Trouvé {combination} en {nbr_of_try} essais"
@@ -99,10 +97,10 @@ def human_mode(codemakerversion):
         colors_name=colors_name, 
         win_message=win_message, 
         nbr_of_try=nbr_of_try,
-        solution = solution,
+        solution=solution,
         nbr_of_line=nbr_of_line,
-        mode = mode,
-        codemakerversion = codemakerversion
+        mode=mode,
+        codemakerversion=codemakerversion
     )
 
 def auto_mode(mode, codemaker):
@@ -168,10 +166,10 @@ def human_codemaker():
     """
     colors_name = [color_dic[code] for code in common.COLORS]
     length = common.LENGTH
-    codebreaker = request.args.get("codebreaker")  # Par défaut, le mode est humain
+    mode = request.args.get("mode")  # Par défaut, le mode est humain
     if request.method == 'POST':
         session['solution'] = get_solution_from_post()
-        return redirect(url_for('main.game', mode = codebreaker, reset = "true", codemaker = "human"))
+        return redirect(url_for('main.game', mode = mode, reset = "true", codemaker = "human"))
     return render_template(
         "human_codemaker.html",
         solution = session.get('solution'),

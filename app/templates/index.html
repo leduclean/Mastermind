@@ -4,14 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <title>Jeu du Mastermind - Version Humain</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/mastermind.css') }}" </head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mastermind.css') }}" >
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dropdownbox.css') }}">
+
+</head>
 
 <body>
     <nav>
         <ul>
             <li>
                 <a href="{{ url_for('main.index') }}">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="12" height="12"
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"
                         fill="currentColor">
                         <path
                             d="M19 21H5C4.44772 21 4 20.5523 4 20V11L1 11L11.3273 1.6115C11.7087 1.26475 12.2913 1.26475 12.6727 1.6115L23 11L20 11V20C20 20.5523 19.5523 21 19 21ZM6 19H18V9.15745L12 3.7029L6 9.15745V19Z">
@@ -30,43 +34,94 @@
         <h1 onclick="resetGame()">Mastermind</h1>
     </div>
 
-    <p>Full auto</p>
-    <ul>
-        {% for codebreakernumber in range(3) %}
-        {% for codemakernumber in range(3) %}
-        <li>
-            <a href="{{ url_for('main.game', mode = codebreakernumber, codemaker = codemakernumber, reset='true') }}">
-                Auto mode: codemaker {{ codemakernumber }} vs codebreaker {{ codebreakernumber }}
-            </a>
-        </li>
-        {% endfor %}
-        {% endfor %}
-    </ul>
 
-    <p>Human vs auto modes</p>
-    <ul>
-        {% for codemakernumber in range(3) %}
-        <li>
-            <a href="{{ url_for('main.game', mode='human', codemaker = codemakernumber, reset='true') }}">
-                Play in human mode against auto codemaker {{ codemakernumber }}
+    <div class="dropdown-wrapper">
+        <div class="sec-center">
+          <!-- Dropdown principal -->
+          <input class="dropdown" type="checkbox" id="dropdown" name="dropdown" />
+          <label class="for-dropdown" for="dropdown">
+            Choose your options<i class="uil uil-arrow-down"></i>
+          </label>
+        
+          <div class="section-dropdown">
+            <!-- Lien simple -->
+            <a href="{{ url_for('main.human_codemaker', mode='human', reset='true') }}">
+              Full Human <i class="uil uil-arrow-right"></i>
             </a>
-        </li>
-        {% endfor %}
-        {% for codebreakernumber in range(3) %}
-        <li>
-            <a href="{{ url_for('main.human_codemaker', mode='auto', codebreaker = codebreakernumber, reset='true')}}">
-                Play as human codemaker against codebreaker {{ codebreakernumber }}
-            </a>
-        </li>
-        {% endfor %}
-    </ul>
+      
+            <!-- Sous-dropdown 1 -->
+            <div class="dropdown-section">
+              <input class="dropdown-sub" type="checkbox" id="dropdown-sub-1" name="dropdown-sub-1" />
+              <label class="for-dropdown-sub" for="dropdown-sub-1">
+                Full auto <i class="uil uil-plus"></i>
+              </label>
+              <div class="section-dropdown-sub">
+                {% for  codemakernumber in range(3) %}
+                  {% for codebreakernumber in range(3) %}
+                    <a href="{{ url_for('main.game', mode=codebreakernumber, codemaker=codemakernumber, reset='true') }}">
+                      Codemaker {{ codemakernumber }} vs Codebreaker {{ codebreakernumber }}
+                      <i class="uil uil-arrow-right"></i>
+                    </a>
+                  {% endfor %}
+                {% endfor %}
+              </div>
+            </div>
+      
+            <!-- Sous-dropdown 2 -->
+            <div class="dropdown-section">
+              <input class="dropdown-sub" type="checkbox" id="dropdown-sub-2" name="dropdown-sub-2" />
+              <label class="for-dropdown-sub" for="dropdown-sub-2">
+                Human Codebreaker <i class="uil uil-plus"></i>
+              </label>
+              <div class="section-dropdown-sub">
+                {% for codemakernumber in range(3) %}
+                  <a href="{{ url_for('main.game', mode='human', codemaker=codemakernumber, reset='true') }}">
+                    Against Auto codemaker {{ codemakernumber }}
+                    <i class="uil uil-arrow-right"></i>
+                  </a>
+                {% endfor %}
+              </div>
+            </div>
+      
+            <!-- Sous-dropdown 3 -->
+            <div class="dropdown-section">
+              <input class="dropdown-sub" type="checkbox" id="dropdown-sub-3" name="dropdown-sub-3" />
+              <label class="for-dropdown-sub" for="dropdown-sub-3">
+                Human Codemaker <i class="uil uil-plus"></i>
+              </label>
+              <div class="section-dropdown-sub">
+                {% for codebreakernumber in range(3) %}
+                  <a href="{{ url_for('main.human_codemaker', mode=codebreakernumber, reset='true') }}">
+                    Against codebreaker {{ codebreakernumber }}
+                    <i class="uil uil-arrow-right"></i>
+                  </a>
+                {% endfor %}
+              </div>
+            </div>
+      
+          </div>
+        </div>
+      </div>
+      
 
-    <p>Full human mode</p>
-    <p><a href="{{ url_for('main.human_codemaker', mode='human') }}">Play full human mode</a></p>
-
-    <div class="images">
-        <p></p>
-    </div>
+      
+      <script>
+        const subDropdowns = document.querySelectorAll('.dropdown-sub');
+      
+        subDropdowns.forEach((checkbox) => {
+          checkbox.addEventListener('change', () => {
+            if (checkbox.checked) {
+              subDropdowns.forEach((other) => {
+                if (other !== checkbox) {
+                  other.checked = false;
+                }
+              });
+            }
+          });
+        });
+      </script>
+      
+      
 </body>
 
 </html>

@@ -1,7 +1,7 @@
 
-import { fillSlot } from './basics.js';
+import { fillSlot, updateArrow } from './basics.js';
 // Variables globales
-let currentAttempt = 1;
+let currentLine = 1;
 let totalAttempts = attempts.length;
 
 const letterToColor = {
@@ -10,7 +10,7 @@ const letterToColor = {
     'V': 'green',  // Vert
     'J': 'yellow', // Jaune
     'N': 'black',  // Noir
-    'G': 'grey',   // Gris
+    'G': 'gray',   // Gris
     'O': 'orange', // Orange
     'M': 'brown',  // Marron
 };
@@ -50,12 +50,12 @@ function updateEvaluationSlots(line, cplaced, iplaced) {
 }
 // Fonction pour afficher les tentatives successives
 function displayNextAttempt() {
-    console.log("displayNextAttempt appelée, currentAttempt:", currentAttempt);
+    console.log("displayNextAttempt appelée, currentLine:", currentLine);
 
     // Vérifier que nous avons encore des tentatives à traiter
-    if (currentAttempt <= totalAttempts) {
+    if (currentLine <= totalAttempts) {
         // Récupérer l'essai actuel de la liste `attempts`
-        let to_extract = attempts[currentAttempt - 1];
+        let to_extract = attempts[currentLine - 1];
         let combination = to_extract[0]
         let cplaced = parseInt(to_extract[1][0]);    // Nombre de bien placés
         let iplaced = parseInt(to_extract[1][2]);    // Nombre de mal placés
@@ -63,39 +63,33 @@ function displayNextAttempt() {
 
         // Mettre à jour les plots avec les couleurs de la combinaison testée
         for (let i = 0; i < combination.length; i++) {
-            let slot = document.getElementById(`slot-${currentAttempt}-${i + 1}`);
+            let slot = document.getElementById(`slot-${currentLine}-${i + 1}`);
             if (slot) {
                 let color = letterToColor[combination[i]];
                 fillSlot(slot, color);
                 localStorage.setItem(slot, color);
             } else {
-                console.warn(`Slot slot-${currentAttempt}-${i + 1} introuvable`);
+                console.warn(`Slot slot-${currentLine}-${i + 1} introuvable`);
             }
         }
 
         // Mettre à jour les slots d'évaluation
-        updateEvaluationSlots(currentAttempt , cplaced, iplaced);
+        updateEvaluationSlots(currentLine , cplaced, iplaced);
 
-        // Mettre à jour la position de la flèche
-        const arrow = document.querySelector(".arrow-container");
-        if (arrow) {
-            const lineHeight = 65; // Hauteur d'une ligne (slot + gap)
-            const translationY = (currentAttempt - 1) * lineHeight;
-            arrow.style.transform = `translateY(-${Math.min(translationY, (totalAttempts - 1) * lineHeight)}px)`;
-        }
+        updateArrow(currentLine)
 
 
 
         for (let i = 0; i < combination.length; i++) {
-            let slot = document.getElementById(`slot-${currentAttempt - 1}-${i + 1}`);
+            let slot = document.getElementById(`slot-${currentLine - 1}-${i + 1}`);
             if (slot) {
                 slot.classList.add("onload");
                 slot.classList.remove("filled");
             }
         }
-        let slots = document.querySelectorAll(`.evaluation-area-${currentAttempt} .evaluation-slot`);
+        let slots = document.querySelectorAll(`.evaluation-area-${currentLine} .evaluation-slot`);
         slots.forEach((slot, index) => {
-            let savedColor = localStorage.getItem(`evaluation-slot-${currentAttempt}-${index}`);
+            let savedColor = localStorage.getItem(`evaluation-slot-${currentLine}-${index}`);
             if (savedColor) {
                 fillSlot(slot, savedColor, true)
                 console.log('random')
@@ -103,8 +97,8 @@ function displayNextAttempt() {
         });
 
         // Passer à l'essai suivant après un délai
-        currentAttempt++;
-        setTimeout(displayNextAttempt, 3000);
+        currentLine++;
+        setTimeout(displayNextAttempt, 4000);
     }
 }
 

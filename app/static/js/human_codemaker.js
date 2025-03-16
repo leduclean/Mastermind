@@ -1,4 +1,7 @@
 
+import { fillSlot } from './basics.js';
+
+
 function getCombination() {
     let combination = '';
     const colorToLetter = {
@@ -9,7 +12,7 @@ function getCombination() {
         'darkorange': 'O',   
         'black': 'N',        
         'sienna': 'M',       
-        'dimgray': 'G'       
+        'gray': 'G'       
       };
       
     
@@ -17,8 +20,7 @@ function getCombination() {
     // On parcourt tous les slots
     document.querySelectorAll('.slot').forEach(function(slot) {
         // On lit la couleur définie en inline style
-        let slotColor = slot.style.backgroundColor;
-        // Vérifier si slotColor correspond à l'un des noms attendus
+        let slotColor = slot ? window.getComputedStyle(slot).getPropertyValue('--slot-color') : '';            // Vérifier si slotColor correspond à l'un des noms attendus
         for (let colorKey in colorToLetter) {
             if (slotColor === colorKey) {
                 combination += colorToLetter[colorKey];
@@ -54,11 +56,7 @@ function handleDrop(event) {
     const color = event.dataTransfer.getData("text/plain");
     
     if (color) {
-        slot.classList.add('filled');
-        slot.classList.remove("animate-drop");
-
-        void slot.offsetWidth;
-        slot.classList.add("animate-drop");
+        fillSlot(slot,color)
         document.getElementById("solution").value = getCombination();
         
     }

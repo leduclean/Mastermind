@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-LENGTH = 4
+LENGTH = 5
 COLORS = ['R', 'V', 'B', 'J', 'N', 'M', 'O', 'G']
 import itertools
 
@@ -61,37 +61,37 @@ def maj_possibles(possible_combinations, tested_combination, associated_evaluati
     possible_combinations.intersection_update(new_possible_combinations) # mets a jour directement le set avant le .intersectionupdate
 
 #%% Partie Test
-
-donner_possibles(['R', 'V', 'B', 'J'],evaluation(['R', 'V', 'B', 'J'], 'RVBR'))
-
-
-argument = ['E', 'G', 'Y', 'L', 'C']
-ref = ['B', 'V', 'E', 'A', 'O']
-
-evaluation(argument,ref)
-
-argument = ['W', 'Q', 'A', 'T', 'N', 'S', 'C', 'I', 'E']
-ref = ['Y', 'Q', 'H', 'G', 'D', 'T', 'J', 'J', 'I']
-
-evaluation(argument,ref)
+if __name__ == "__main__":
+    donner_possibles(['R', 'V', 'B', 'J'],evaluation(['R', 'V', 'B', 'J'], 'RVBR'))
 
 
-argument = ['Y', 'M', 'C', 'Y', 'S']
-ref = ['Z', 'R', 'I', 'L', 'C']
-evaluation(argument,ref)
+    argument = ['E', 'G', 'Y', 'L', 'C']
+    ref = ['B', 'V', 'E', 'A', 'O']
+
+    evaluation(argument,ref)
+
+    argument = ['W', 'Q', 'A', 'T', 'N', 'S', 'C', 'I', 'E']
+    ref = ['Y', 'Q', 'H', 'G', 'D', 'T', 'J', 'J', 'I']
+
+    evaluation(argument,ref)
 
 
-argument = ['M', 'J', 'C', 'D', 'Y', 'O', 'T']
-ref = ['T', 'M', 'K', 'Y', 'L', 'Q', 'J']
-evaluation(argument,ref)
+    argument = ['Y', 'M', 'C', 'Y', 'S']
+    ref = ['Z', 'R', 'I', 'L', 'C']
+    evaluation(argument,ref)
 
-argument = ['E', 'G', 'N', 'F', 'H', 'C', 'J', 'V', 'U', 'N']
-ref = ['U', 'S', 'S', 'S', 'I', 'Y', 'M', 'H', 'C', 'F']
-evaluation(argument,ref)
 
-argument = ['J', 'C', 'O', 'C', 'T', 'B']
-ref = ['V', 'B', 'E', 'X', 'Q', 'G']
-evaluation(argument,ref)
+    argument = ['M', 'J', 'C', 'D', 'Y', 'O', 'T']
+    ref = ['T', 'M', 'K', 'Y', 'L', 'Q', 'J']
+    evaluation(argument,ref)
+
+    argument = ['E', 'G', 'N', 'F', 'H', 'C', 'J', 'V', 'U', 'N']
+    ref = ['U', 'S', 'S', 'S', 'I', 'Y', 'M', 'H', 'C', 'F']
+    evaluation(argument,ref)
+
+    argument = ['J', 'C', 'O', 'C', 'T', 'B']
+    ref = ['V', 'B', 'E', 'X', 'Q', 'G']
+    evaluation(argument,ref)
 
 
 

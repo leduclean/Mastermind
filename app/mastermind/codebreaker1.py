@@ -15,12 +15,25 @@ def init():
 
 def codebreaker(evaluation_p: tuple) -> str:
     """
-    Génère une combinaison aléatoire non tentée. Par soucis de compatibilité avec les foncitons
-    de test, on lui passe aussi l'evaluation précèdente en argument même si elle ne sera pas prise en compte
+    Génère une combinaison aléatoire non tentée auparavant.
+
+    Args:
+        evaluation_p (tuple[int, int]): L'évaluation précédente de la combinaison proposée.
+            Cet argument est inclus pour des raisons de compatibilité avec les fonctions de test,
+            mais il n'est pas utilisé dans cette implémentation.
+
+    Returns:
+        str: Une combinaison aléatoire non tentée auparavant.
     """
-    global tried
-    while 1:
-        to_try = ''.join(random.choices(common.COLORS, k = common.LENGTH))
+    global tried  # Ensemble des combinaisons déjà tentées
+    
+    while True:
+        # Génère une combinaison aléatoire en choisissant des couleurs parmi `common.COLORS`
+        to_try = ''.join(random.choices(common.COLORS, k=common.LENGTH))
+        
+        # Vérifie si la combinaison n'a pas déjà été tentée
         if to_try not in tried:
+            # Ajoute la combinaison à l'ensemble des combinaisons tentées
             tried.add(to_try)
+            # Retourne la combinaison non tentée
             return to_try

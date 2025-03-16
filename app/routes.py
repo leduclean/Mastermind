@@ -108,9 +108,7 @@ def auto_mode(mode, codemaker):
     session['nbr_of_try'] = 0  # Réinitialiser le compteur d'essais
     length = common.LENGTH
     nbr_of_line = 10
-
     def flask_output(message):
-        print(message)
         attempts = session.get("attempts", [])  # Récupérer la liste actuelle
         attempts.append(message)  # Ajouter le message
         session["attempts"] = attempts  # Mettre à jour la session
@@ -118,13 +116,13 @@ def auto_mode(mode, codemaker):
 
     # Appel de play_log pour générer les logs et remplir la session
     play_log(
-        codemaker_version=codemaker if codemaker != "human" else 1,  # Met la bonne version de ton codemaker et utilise la version 1 si c'est un humain
-        codebreaker_version=mode,     # Met la bonne version du codebreaker automatique
+        codemaker_version= 1 if codemaker == "human" else codemaker,  # Met la bonne version de ton codemaker et utilise la version 1 si c'est un humain
+        codebreaker_version = mode,     # Met la bonne version du codebreaker automatique
         log_file=None,
         reset_solution=True,
         quiet=True,
-        output_func=flask_output,
-        human_solution= session.get("solution") 
+        output_func = flask_output,
+        human_solution = session.get("solution") if codemaker == "human" else False
     )
 
     # Après que play_log a modifié la session, on récupère la liste des messages

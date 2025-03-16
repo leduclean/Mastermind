@@ -25,7 +25,8 @@ def check_compatibility(codemaker_version: int, codebreaker_version: int):
     On lève une erreur si l'on tente de jouer codemaker0 avec codebreaker2,
     car codebreaker2 a besoin d'une évaluation complète.
     """
-    if codemaker_version == 0 and codebreaker_version == 2:
+
+    if (codemaker_version, codebreaker_version) == (0, 2):
         raise ValueError("Incompatibilité détectée : codebreaker2 nécessite une évaluation complète et ne peut pas être utilisé avec codemaker0.")
 
 def play(codemaker_version: int, codebreaker_version: int, reset_solution=True, quiet = False, output=print, get_input=None) -> int:
@@ -91,7 +92,7 @@ def play_log(codemaker_version, codebreaker_version: int, log_file: str, reset_s
     Par défaut, si aucune fonction n'est fournie, les logs sont écrits dans un fichier texte à l'aide de FileLogger.
         int: nombre d'essais effectués.
     """
-    check_compatibility(codemaker_version, codebreaker_version)
+    check_compatibility(codemaker_version,codebreaker_version)
     
     if not human_solution:
         codemaker_module = get_codemaker_module(codemaker_version) 
@@ -100,9 +101,6 @@ def play_log(codemaker_version, codebreaker_version: int, log_file: str, reset_s
             codemaker_module.init()
 
     codebreaker_module = get_codebreaker_module(codebreaker_version)
-    
-
-
     codebreaker_module.init()
 
     if output_func is None:
@@ -136,5 +134,5 @@ def play_log(codemaker_version, codebreaker_version: int, log_file: str, reset_s
 if __name__ == "__main__":
     print("Ce fichier play.py est exécuté directement.")
     # appelle des fonctions ici 
-    play_log(1, 2, "nul")
+    play_log(0, 2, "nul")
 

@@ -57,7 +57,7 @@
               </label>
               <div class="section-dropdown-sub">
                 {% for  codemakernumber in range(3) %}
-                  {% for codebreakernumber in range(3) %}
+                  {% for codebreakernumber in range(4) %}
                     <a href="{{ url_for('main.game', mode=codebreakernumber, codemaker=codemakernumber, reset='true') }}">
                       Codemaker {{ codemakernumber }} vs Codebreaker {{ codebreakernumber }}
                       <i class="uil uil-arrow-right"></i>
@@ -90,7 +90,7 @@
                 Human Codemaker <i class="uil uil-plus"></i>
               </label>
               <div class="section-dropdown-sub">
-                {% for codebreakernumber in range(3) %}
+                {% for codebreakernumber in range(4) %}
                   <a href="{{ url_for('main.human_codemaker', mode=codebreakernumber, reset='true') }}">
                     Against codebreaker {{ codebreakernumber }}
                     <i class="uil uil-arrow-right"></i>

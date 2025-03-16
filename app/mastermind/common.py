@@ -1,64 +1,101 @@
 #!/usr/bin/env python3
 
-LENGTH = 5
+LENGTH = 4
 COLORS = ['R', 'V', 'B', 'J', 'N', 'M', 'O', 'G']
 import itertools
 
 # Notez que vos programmes doivent continuer à fonctionner si on change les valeurs par défaut ci-dessus
 
 
-def evaluation(arg, ref):
+def evaluation(arg: str, ref: str) -> tuple[int, int]:
+    """
+    Compare deux combinaisons de couleurs et retourne le nombre de couleurs bien placées et mal placées.
+
+    Args:
+        arg (str): La combinaison proposée par le joueur.
+        ref (str): La combinaison de référence à deviner.
+
+    Returns:
+        tuple[int, int]: Un tuple contenant :
+            - Le nombre de couleurs bien placées.
+            - Le nombre de couleurs mal placées mais présentes dans la combinaison.
+
+    Raises:
+        AssertionError: Si les deux combinaisons n'ont pas la même longueur.
+    """
     assert len(arg) == len(ref), "Les deux combinaisons doivent avoir la même longueur"
 
     LENGTH = len(arg)
-    correctly_placed = 0
-    incorrectly_placed = 0
+    correctly_placed = 0  # Nombre de couleurs bien placées
+    incorrectly_placed = 0  # Nombre de couleurs mal placées mais présentes
 
-    # Étape 1 : Détection des bien placés
-    rest_arg = []
-    rest_ref = []
+    # Étape 1 : Détection des couleurs bien placées
+    rest_arg = []  # Stocke les couleurs de `arg` qui ne sont pas bien placées
+    rest_ref = []  # Stocke les couleurs de `ref` qui ne sont pas bien placées
 
     for i in range(LENGTH):
-        # assert arg[i] in COLORS, "Les couleurs en entré doivent être dans les couleurs disponibles"
         if arg[i] == ref[i]:
             correctly_placed += 1
         else:
             rest_arg.append(arg[i])
             rest_ref.append(ref[i])
 
-    # Étape 2 : Détection des mal placés (présents mais mal placés)
+    # Étape 2 : Détection des couleurs mal placées mais présentes
     for color in rest_arg:
         if color in rest_ref:
             incorrectly_placed += 1
             rest_ref.remove(color)  # Empêche de compter une couleur plusieurs fois
 
-    return correctly_placed , incorrectly_placed
+    return correctly_placed, incorrectly_placed
 
 
-#TO DO : Ajouter doc string et meilleur commentaires et tt
+all_permutations = set(map(''.join,itertools.product(COLORS,repeat = LENGTH))) # On convertit les tuples en chaines de caractères
 
-def donner_possibles(tested_combination: str, associated_evaluation: tuple) -> set:
-    correctly_placed , incorrectly_placed = associated_evaluation
-    #Faire un ensemble avec toutes les possibilites,
-    all_permutations = set(map(''.join,itertools.product(COLORS,repeat = LENGTH))) # On convertit les tuples en chaines de caractères
-    #Maintenant on va supprimer les combinaisons qui sont pas possibles et apres on aura l ensemble des combinaisons finales
+def donner_possibles(tested_combination: str, associated_evaluation: tuple[int, int]) -> set[str]:
+    """
+    Retourne un ensemble de combinaisons possibles qui sont cohérentes avec l'évaluation donnée.
 
-    possible_combination = set()
+    Args:
+        tested_combination (str): La combinaison testée par le joueur.
+        associated_evaluation (tuple[int, int]): L'évaluation de la combinaison testée, sous forme de tuple
+            (nombre de couleurs bien placées, nombre de couleurs mal placées).
 
-    for element in all_permutations :
-        #On regarde si le nombre de meme couleur, si c'est egal a bien_places+ mal_places c'est deja bien
-        #Ensuite on regarde si le nombre de meme places = nombre bien places
+    Returns:
+        set[str]: Un ensemble de combinaisons possibles qui correspondent à l'évaluation donnée.
+    """
+    global all_permutations
+    correctly_placed, incorrectly_placed = associated_evaluation
+
+    possible_combination = set()  # Ensemble pour stocker les combinaisons possibles
+
+    for element in all_permutations:
+        # On évalue chaque combinaison dans `all_permutations` par rapport à `tested_combination`
         cplaces, iplaces = evaluation(tested_combination, element)
+        # On conserve uniquement les combinaisons qui correspondent à l'évaluation donnée
         if cplaces == correctly_placed and iplaces == incorrectly_placed:
             possible_combination.add(element)
 
-    #print(liste_return)
     return possible_combination
 
-# To DO : Commentaires
-def maj_possibles(possible_combinations, tested_combination, associated_evaluation):
+
+def maj_possibles(possible_combinations: set[str], tested_combination: str, associated_evaluation: tuple[int, int]) -> None:
+    """
+    Met à jour l'ensemble des combinaisons possibles en fonction de l'évaluation d'une combinaison testée.
+
+    Args:
+        possible_combinations (set[str]): L'ensemble actuel des combinaisons possibles.
+        tested_combination (str): La combinaison testée par le joueur.
+        associated_evaluation (tuple[int, int]): L'évaluation de la combinaison testée, sous forme de tuple
+            (nombre de couleurs bien placées, nombre de couleurs mal placées).
+
+    Returns:
+        None: La fonction modifie directement `possible_combinations` en place.
+    """
+    # On génère les nouvelles combinaisons possibles basées sur l'évaluation
     new_possible_combinations = donner_possibles(tested_combination, associated_evaluation)
-    possible_combinations.intersection_update(new_possible_combinations) # mets a jour directement le set avant le .intersectionupdate
+    # On met à jour l'ensemble des combinaisons possibles en conservant uniquement celles qui sont dans les deux ensembles
+    possible_combinations.intersection_update(new_possible_combinations)
+
 
 #%% Partie Test
 if __name__ == "__main__":

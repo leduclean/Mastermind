@@ -48,6 +48,15 @@ def evaluation(arg: str, ref: str) -> tuple[int, int]:
 
     return correctly_placed, incorrectly_placed
 
+def verif_combination(combination):
+    """Vérifie la validité de la combination saisie par l'utilisateur."""
+    if len(combination) != LENGTH:
+        return f"invalid combination : length {len(combination)} supposed to be {LENGTH}"
+    for c in combination:
+        if c not in COLORS:
+            return f"invalid combination : color {c} doesn't exists"
+    return None  # Pas d'erreur
+
 
 all_permutations = set(map(''.join,itertools.product(COLORS,repeat = LENGTH))) # On convertit les tuples en chaines de caractères
 

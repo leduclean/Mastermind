@@ -11,7 +11,7 @@ def start_scss_thread():
 
 def create_app():
     app = Flask(__name__)
-    app.debug = True
+    app.debug = False
     
     # Lancer le watcher SCSS en mode debug
     if app.debug:

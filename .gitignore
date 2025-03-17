@@ -6,3 +6,5 @@ venv/
 instance/
 .env
 .webassets-cache/
+app/static/scss/
+app/watch_scss.py

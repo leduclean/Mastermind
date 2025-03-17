@@ -53,6 +53,10 @@
 
     <div class="choice">
         <h2>Choose a color and drag in the slot</h2>
+        {% if error %}
+            <p class = "errror"> {{error}}</p>
+        {% endif %}
+
         <ul>
             {% for color in colors_name%}
             <li class="color-option" data-color ="{{color}}"style="background-color: {{color}};" draggable="true"></li>
@@ -116,23 +120,19 @@
         </button>
     </div>
 
-    <!-- <div class="container">
-        <div class="message">
-            {% if message %}
-            <p>{{ message }}</p>
-            {% endif %}
-
-            {% if win_message %}
-            <p>{{ win_message }}, {{attempts}}</p>
-            {% else %}
-            {% if cplaced is not none and iplaced is not none %}
-            <p>L'évaluation est: {{ cplaced }} bien placés, {{ iplaced }} mal placés.</p>
-            {% else %}
-            <p>Aucune évaluation disponible pour le moment.</p>
-            {% endif %}
-            {% endif %}
+    <div class="popup-container" id="popupContainer">
+        <div class="popup-message" id="winMessage">
+            <h1>YOU WIN IN <span id="nbr_of_line"></span> try</h1>
+            <p onclick="resetGame()">Play again ?</p>
+            <a href="{{ url_for('main.index') }}"><p>Go Home </p></a>
         </div>
-    </div> -->
+        <div class="popup-message" id="looseMessage">
+            <h1>YOU Loose, solution was {{solution}}</h1>
+            <p onclick="resetGame()">Play again ?</p>
+            <a href="{{ url_for('main.index') }}"><p>Go Home </p></a>
+        </div>
+    </div>
+
 
 
 
@@ -142,7 +142,8 @@
         var length = {{ length | tojson}};
         var cplaced = {{ cplaced | tojson}};
         var iplaced = {{ iplaced | tojson}};
-        var solution = {{solution |tojson }}
+        var solution = {{solution |tojson }};
+        var error = {{error | tojson}}
     </script>
     <script type="module" src="{{ url_for('static', filename='js/human_player.js') }}">
     </script>

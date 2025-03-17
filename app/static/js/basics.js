@@ -107,3 +107,51 @@ export function updateArrow(currentLine){
     arrow.style.transform = `translateY(-${Math.min(translationY, (nbr_of_line - 1) * lineHeight)}px)`;
   }
 }
+
+export function displayWin(currentLine, solutiontext = ""){
+  const popupContainer = document.getElementById('popupContainer');
+  const winMessage = document.getElementById('winMessage');
+  const looseMessage = document.getElementById('looseMessage');
+  document.getElementById("nbr_of_line").textContent = currentLine;
+  solution =  document.getElementById("solution")
+  if (solution){
+    solution.textContent = solutiontext;
+  }
+  // On cache l'autre message si nécessaire
+  looseMessage.style.display = 'none';
+  // On affiche le message win
+  winMessage.style.display = 'block';
+
+  // On active l'overlay
+  popupContainer.classList.add('active');
+}
+
+export function displayLoose(solutiontext = ""){
+  const popupContainer = document.getElementById('popupContainer');
+  const winMessage = document.getElementById('winMessage');
+  const looseMessage = document.getElementById('looseMessage');
+  solution =  document.getElementById("solution")
+  if (solution){
+    solution.textContent = solutiontext;
+  }
+  
+
+  // On cache le message win si nécessaire
+  winMessage.style.display = 'none';
+  // On affiche le message loose
+  looseMessage.style.display = 'block';
+
+  // On active l'overlay
+  popupContainer.classList.add('active');
+}
+
+export function resetPopup() {
+  const popupContainer = document.getElementById("popupContainer");
+  // Retire la classe active pour cacher l'overlay avec flou
+  popupContainer.classList.remove("active");
+  
+  // Masque tous les messages de popup
+  document.querySelectorAll(".popup-message").forEach(message => {
+      message.style.display = "none";
+  });
+}

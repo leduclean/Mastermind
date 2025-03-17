@@ -1,9 +1,9 @@
 
-import { fillSlot, updateArrow } from './basics.js';
+import { fillSlot, updateArrow,displayLoose, displayWin, resetPopup } from './basics.js';
 // Variables globales
 let currentLine = 1;
 let totalAttempts = attempts.length;
-
+let solution = attempts.at(-1)[0];
 const letterToColor = {
     'R': 'red',    // Rouge
     'B': 'blue',   // Bleu
@@ -95,7 +95,12 @@ function displayNextAttempt() {
                 console.log('random')
             }
         });
-
+        if (currentLine == totalAttempts){
+            displayWin(currentLine, solution);
+        }
+        if (currentLine > nbr_of_line){
+            displayLoose(solution);
+        }
         // Passer à l'essai suivant après un délai
         currentLine++;
         setTimeout(displayNextAttempt, 4000);
@@ -109,6 +114,13 @@ function removeResetParam() {
 }
 // Déclencher l'affichage des tentatives après le chargement de la page
 window.onload = function () {
+        // Vérifier dans le sessionStorage
+  if (sessionStorage.getItem("popreset") === 'true') {
+    resetPopup();
+    console.log("resetpop");
+    // Supprimer le flag pour éviter de réafficher le popup lors d'autres rechargements
+    sessionStorage.removeItem("popreset");
+}
     console.log("window.onload appelé");
     if (attempts.length > 0) {
         setTimeout(displayNextAttempt, 1000);
@@ -122,4 +134,13 @@ window.onload = function () {
     }
 };
 
+function resetGame() {
+    // On stocke le flag dans le sessionStorage
+    sessionStorage.setItem('popreset', 'true');
+    // On efface uniquement le localStorage (sans toucher au sessionStorage)
+    localStorage.clear();
+    console.log('clear');
+    location.reload();
 
+}
+window.resetGame = resetGame;  

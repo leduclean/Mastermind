@@ -57,6 +57,9 @@
         <div class="choice">
             <h2>Create a new code that the player will need to guess: </h2>
             <h2> Choose a color and drag in the slot</h2>
+            {% if error %}
+                <p class="error-message">{{ error }}</p>
+            {% endif %}
             <ul>
                 {% for color in colors_name %}
                 <li class="color-option {{ color }}" data-color='{{color}}' draggable="true"

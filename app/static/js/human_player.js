@@ -6,13 +6,13 @@
 let currentLine = localStorage.getItem('currentLine')
   ? parseInt(localStorage.getItem('currentLine'))
   : 1;
-let currentSlot = 1; // Currently selected slot
+
 
 // Note: The following variables (length, cplaced, iplaced, nbr_of_line, solution) 
 // are assumed to be defined elsewhere in your application.
 
 
-import {fillSlot, updateArrow} from './basics.js';
+import {fillSlot, updateArrow, displayLoose, displayWin, resetPopup} from './basics.js';
 
 /**
  * -----------------------------
@@ -31,6 +31,7 @@ import {fillSlot, updateArrow} from './basics.js';
 function updateEvaluationSlots(line, cplaced, iplaced) {
     let slots = document.querySelectorAll(`.evaluation-area-${line} .evaluation-slot`);
     let index = 0;
+
     
     // Met à jour les slots pour les couleurs bien placées
     for (let i = 0; i < cplaced; i++) {
@@ -168,10 +169,8 @@ function handleDrop(event) {
 const combinationButton = document.getElementById("submit");
 if (combinationButton) {
   combinationButton.addEventListener('click', function() {
-
     currentLine++;
     localStorage.setItem('currentLine', currentLine);
-    currentSlot = 1;
   });
 }
 
@@ -200,7 +199,25 @@ function removeResetParam() {
  * Restores the game state from local storage and updates UI elements.
  */
 document.addEventListener('DOMContentLoaded', function() {
-  console.log(solution); // Log the solution variable (assumed defined elsewhere)
+    // Vérifier dans le sessionStorage
+  if (sessionStorage.getItem("popreset") === 'true') {
+      resetPopup();
+      console.log("resetpop");
+      // Supprimer le flag pour éviter de réafficher le popup lors d'autres rechargements
+      sessionStorage.removeItem("popreset");
+      cplaced = 0;
+  }
+  
+  if (error) { // if there is an error, we don't go through and we stay to the current line 
+    currentLine --;
+    localStorage.setItem('currentLine', currentLine);
+  } 
+  if (cplaced == length){
+    displayWin(currentLine - 1);
+  }
+  if (currentLine > nbr_of_line){
+    displayLoose();
+  }
 
   // Update evaluation slots for the previous line
   updateEvaluationSlots(currentLine - 1, cplaced, iplaced);
@@ -231,17 +248,20 @@ document.addEventListener('DOMContentLoaded', function() {
   updateArrow(currentLine)
 
 function resetGame() {
+    // On stocke le flag dans le sessionStorage
+    sessionStorage.setItem('popreset', 'true');
+    // On efface uniquement le localStorage (sans toucher au sessionStorage)
     localStorage.clear();
-    console.log('clear')
+    console.log('clear');
+    location.reload();
+
 }
 
 window.resetGame = resetGame;  
-
   // Check for a reset parameter in the URL to reset the game state
   const params = new URLSearchParams(window.location.search);
   if (params.get('reset') === 'true') {
     resetGame();
-    console.log('toreset')
     removeResetParam();
   }
 });

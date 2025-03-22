@@ -6,6 +6,14 @@ import itertools
 
 # Notez que vos programmes doivent continuer à fonctionner si on change les valeurs par défaut ci-dessus
 
+def verif_combination(combination):
+    """Vérifie la validité de la combination saisie par l'utilisateur."""
+    if len(combination) != LENGTH:
+        return f"invalid combination : length {len(combination)} supposed to be {LENGTH}"
+    for c in combination:
+        if c not in COLORS:
+            return f"invalid combination : color {c} doesn't exists"
+    return None  # Pas d'erreur
 
 def evaluation(arg: str, ref: str) -> tuple[int, int]:
     """
@@ -23,7 +31,13 @@ def evaluation(arg: str, ref: str) -> tuple[int, int]:
     Raises:
         AssertionError: Si les deux combinaisons n'ont pas la même longueur.
     """
-    assert len(arg) == len(ref), "Les deux combinaisons doivent avoir la même longueur"
+    error_arg = verif_combination(arg)
+    error_ref = verif_combination(ref)
+
+    if error_arg:
+        raise AssertionError(error_arg)
+    if error_ref:
+        raise AssertionError(error_ref)
 
     LENGTH = len(arg)
     correctly_placed = 0  # Nombre de couleurs bien placées
@@ -48,14 +62,7 @@ def evaluation(arg: str, ref: str) -> tuple[int, int]:
 
     return correctly_placed, incorrectly_placed
 
-def verif_combination(combination):
-    """Vérifie la validité de la combination saisie par l'utilisateur."""
-    if len(combination) != LENGTH:
-        return f"invalid combination : length {len(combination)} supposed to be {LENGTH}"
-    for c in combination:
-        if c not in COLORS:
-            return f"invalid combination : color {c} doesn't exists"
-    return None  # Pas d'erreur
+
 
 
 all_permutations = set(map(''.join,itertools.product(COLORS,repeat = LENGTH))) # On convertit les tuples en chaines de caractères

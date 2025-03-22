@@ -1,19 +1,17 @@
+from .play import get_codemaker_module, play
+import matplotlib.pyplot as plt  # Assurez-vous d'avoir importé matplotlib si nécessaire
 
-from . import play
-import matplotlib.pyplot as plt
-
-# TO DO : passer les commentaires en anglais 
 def show_histogram(codemaker_version: int, codebreaker_version: int, nbr_of_game: int):
     """
     Affiche un histogramme du nombre d'essais nécessaires pour qu'un codebreaker d'une version donnée
     trouve la solution. Pour chaque partie, on réinitialise le codemaker afin d'obtenir une nouvelle solution.
     """
     resultats = []
-    codemaker_module = play.get_codemaker_module(codemaker_version)
+    codemaker_module = get_codemaker_module(codemaker_version)
 
     for _ in range(nbr_of_game):
         codemaker_module.init()  # Nouvelle solution pour chaque partie
-        resultats.append(play.play(codemaker_version, codebreaker_version, False, True))
+        resultats.append(play(codemaker_version, codebreaker_version, False, True))
 
     plt.hist(resultats, bins=range(min(resultats), max(resultats) + 2), align='left', edgecolor='orange')
     plt.xlabel("Nombre d'essais")
@@ -26,14 +24,13 @@ def show_gain(codemaker_version: int, version1: int, version2: int, nbr_of_game:
     Affiche un diagramme de dispersion du gain (différence d'essais) entre deux versions de codebreaker.
     Pour chaque partie, le codemaker est initialisé une seule fois afin que les deux codebreaker jouent sur la même solution.
     """
-
     gains = []
-    codemaker_module = play.get_codemaker_module(codemaker_version)
+    codemaker_module = get_codemaker_module(codemaker_version)
 
     for _ in range(nbr_of_game):
         codemaker_module.init()  # Même solution pour les deux codebreaker
-        score1 = play.play(codemaker_version, version1, False, True)
-        score2 = play.play(codemaker_version, version2, False, True)
+        score1 = play(codemaker_version, version1, False, True)
+        score2 = play(codemaker_version, version2, False, True)
         gains.append(score1 - score2)
 
     plt.scatter(range(1, nbr_of_game + 1), gains, color='orange')
@@ -45,4 +42,4 @@ def show_gain(codemaker_version: int, version1: int, version2: int, nbr_of_game:
 # Exemples d'utilisation :
 if __name__ == "__main__":   
     # show_histogram(1, 2, 100)  # Fonctionnera
-    show_gain(1, 1, 2, 100)     # Lève une erreur si codemaker0 est utilisé avec codebreaker2
+    show_gain(1, 1, 2, 100)     # Lève une erreur si codemaker0 est utilisé avec codebreaker2 

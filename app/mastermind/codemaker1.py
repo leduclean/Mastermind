@@ -1,4 +1,3 @@
-import sys
 import random 
 # On utilise un import relatif (`from . import common`)  
 # pour s'assurer que le module est bien importé,  

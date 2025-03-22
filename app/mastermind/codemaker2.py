@@ -92,7 +92,7 @@ def codemaker(combination: str) -> tuple:
     # Met à jour la solution avec la meilleure combinaison trouvée
     solution = best_combination
     # Affiche la nouvelle solution (pour débogage ou vérification)
-    print(solution)
+    # print(solution)
     return ev
 
 

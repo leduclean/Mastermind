@@ -41,5 +41,5 @@ def show_gain(codemaker_version: int, version1: int, version2: int, nbr_of_game:
 
 # Exemples d'utilisation :
 if __name__ == "__main__":   
-    # show_histogram(1, 2, 100)  # Fonctionnera
-    show_gain(1, 1, 2, 100)     # Lève une erreur si codemaker0 est utilisé avec codebreaker2 
+    show_histogram(1, 1, 1000)  # Fonctionnera
+    #show_gain(1, 1, 2, 100)     # Lève une erreur si codemaker0 est utilisé avec codebreaker2 

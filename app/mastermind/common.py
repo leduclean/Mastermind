@@ -12,7 +12,7 @@ def verif_combination(combination):
         return f"invalid combination : length {len(combination)} supposed to be {LENGTH}"
     for c in combination:
         if c not in COLORS:
-            return f"invalid combination : color {c} doesn't exists"
+            return f"invalid combination : color {c} doesn't exist"
     return None  # Pas d'erreur
 
 def evaluation(arg: str, ref: str) -> tuple[int, int]:
@@ -111,43 +111,6 @@ def maj_possibles(possible_combinations: set[str], tested_combination: str, asso
     new_possible_combinations = donner_possibles(tested_combination, associated_evaluation)
     # On met à jour l'ensemble des combinaisons possibles en conservant uniquement celles qui sont dans les deux ensembles
     possible_combinations.intersection_update(new_possible_combinations)
-
-
-#%% Partie Test
-if __name__ == "__main__":
-    donner_possibles(['R', 'V', 'B', 'J'],evaluation(['R', 'V', 'B', 'J'], 'RVBR'))
-
-
-    argument = ['E', 'G', 'Y', 'L', 'C']
-    ref = ['B', 'V', 'E', 'A', 'O']
-
-    evaluation(argument,ref)
-
-    argument = ['W', 'Q', 'A', 'T', 'N', 'S', 'C', 'I', 'E']
-    ref = ['Y', 'Q', 'H', 'G', 'D', 'T', 'J', 'J', 'I']
-
-    evaluation(argument,ref)
-
-
-    argument = ['Y', 'M', 'C', 'Y', 'S']
-    ref = ['Z', 'R', 'I', 'L', 'C']
-    evaluation(argument,ref)
-
-
-    argument = ['M', 'J', 'C', 'D', 'Y', 'O', 'T']
-    ref = ['T', 'M', 'K', 'Y', 'L', 'Q', 'J']
-    evaluation(argument,ref)
-
-    argument = ['E', 'G', 'N', 'F', 'H', 'C', 'J', 'V', 'U', 'N']
-    ref = ['U', 'S', 'S', 'S', 'I', 'Y', 'M', 'H', 'C', 'F']
-    evaluation(argument,ref)
-
-    argument = ['J', 'C', 'O', 'C', 'T', 'B']
-    ref = ['V', 'B', 'E', 'X', 'Q', 'G']
-    evaluation(argument,ref)
-
-
-
 
 
 # %%

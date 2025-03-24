@@ -29,6 +29,17 @@ class TestCommonFunctions(unittest.TestCase):
         self.assertEqual(common.evaluation("VVVV", "RRRR"), (0, 0))  # Rien de correct
         self.assertEqual(common.evaluation("RVBJ", "JBRV"), (0, 4))  # Tout est mal placé
 
+        # Nouveaux cas de test
+        self.assertEqual(common.evaluation("RGBY", "RGBY"), (4, 0))  # Toutes les couleurs bien placées
+        self.assertEqual(common.evaluation("YRGB", "RGBY"), (0, 4))  # Toutes les couleurs présentes mais mal placées
+        self.assertEqual(common.evaluation("RGGB", "RGBY"), (2, 1))  # Certaines couleurs bien placées, d'autres mal placées
+        self.assertEqual(common.evaluation("YYYY", "RGBY"), (1, 0))  # Une seule couleur correcte bien placée
+        self.assertEqual(common.evaluation("", ""), (0, 0))  # Combinaison vide
+        self.assertEqual(common.evaluation("RRGB", "RGBY"), (1, 2))  # Couleurs répétées
+        self.assertEqual(common.evaluation("BYGR", "RGBY"), (0, 4))  # Toutes les couleurs mal placées
+        self.assertEqual(common.evaluation("RGBP", "RGBY"), (3, 0))  # Une couleur inexistante dans la référence
+        self.assertEqual(common.evaluation("RRRR", "RGBY"), (1, 0))  # Couleurs répétées et mal placées
+
         # Vérifie que la fonction lève une erreur pour des tailles différentes et couleurs non présentes
         with self.assertRaises(AssertionError):
             common.evaluation("RRR", "RRRR")
@@ -36,6 +47,8 @@ class TestCommonFunctions(unittest.TestCase):
         with self.assertRaises(AssertionError):
             common.evaluation("RVKK", "RRRR")
             common.evaluation("RRRR", "RVKK")
+        with self.assertRaises(AssertionError):
+            common.evaluation("RGB", "RGBY")  # Longueurs différentes
 
     
     def test_donner_possibles(self):

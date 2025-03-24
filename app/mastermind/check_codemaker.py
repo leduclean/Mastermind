@@ -17,6 +17,9 @@ def check_codemaker(log_file):
     with open(log_file, 'r') as log :
         lines = log.readlines()
         
+        if lines[-1] != (4,0):
+            return False
+        
         solution = lines[-2]
         
         #Pas besoin de checker la derniere ligne donc len(lines)-1

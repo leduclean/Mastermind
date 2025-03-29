@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 
 import random
-# On utilise un import relatif (`from . import common`)  
-# pour s'assurer que le module est bien importé,  
-# peu importe comment l'application est exécutée avec Flask.  
-# Cela évite les erreurs liées aux imports absolus.  
+
+# On utilise un import relatif (`from . import common`)
+# pour s'assurer que le module est bien importé,
+# peu importe comment l'application est exécutée avec Flask.
+# Cela évite les erreurs liées aux imports absolus.
 from . import common  # N'utilisez pas la syntaxe "form random import XXX"
 
 
@@ -23,5 +24,4 @@ def codebreaker(evaluation_p: tuple):
     combinaison qu'on a proposée (et vaut None si c'est le premier coup de la
     partie). Cette version triviale n'utilise pas cette information, puisqu'elle joue au hasard.
     """
-    return ''.join(random.choices(common.COLORS, k=common.LENGTH))
-
+    return "".join(random.choices(common.COLORS, k=common.LENGTH))

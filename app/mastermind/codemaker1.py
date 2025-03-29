@@ -1,9 +1,11 @@
-import random 
-# On utilise un import relatif (`from . import common`)  
-# pour s'assurer que le module est bien importé,  
-# peu importe comment l'application est exécutée avec Flask.  
-# Cela évite les erreurs liées aux imports absolus.  
+import random
+
+# On utilise un import relatif (`from . import common`)
+# pour s'assurer que le module est bien importé,
+# peu importe comment l'application est exécutée avec Flask.
+# Cela évite les erreurs liées aux imports absolus.
 from . import common
+
 
 def init():
     """
@@ -11,7 +13,7 @@ def init():
     variables utilisées par le codemaker
     """
     global solution
-    solution = ''.join(random.choices(common.COLORS, k=common.LENGTH))
+    solution = "".join(random.choices(common.COLORS, k=common.LENGTH))
 
 
 def codemaker(combinaison):

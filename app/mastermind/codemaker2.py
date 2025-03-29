@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
-import random 
-from . import common
-from . import past_evaluations
 import itertools
+import random
 
+from . import common, past_evaluations
 
 possible_combinations = set()
 permanent_combinations = set()
 solution = ""
+
 
 def init():
     """
@@ -20,17 +20,21 @@ def init():
     """
     global solution, possible_combinations, permanent_combinations
     # Génère une solution aléatoire en choisissant des couleurs parmi `common.COLORS`
-    solution = ''.join(random.choices(common.COLORS, k=common.LENGTH))
+    solution = "".join(random.choices(common.COLORS, k=common.LENGTH))
     # Génère toutes les permutations possibles de combinaisons de couleurs
-    possible_combinations = set(map(''.join, itertools.product(common.COLORS, repeat=common.LENGTH)))
+    possible_combinations = set(
+        map("".join, itertools.product(common.COLORS, repeat=common.LENGTH))
+    )
     # Copie de `possible_combinations` dans `permanent_combinations` pour référence future
     permanent_combinations = possible_combinations.copy()
-    
-    if past_evaluations.LENGTH != common.LENGTH or past_evaluations.LENGTH != common.LENGTH :
+
+    if (
+        past_evaluations.LENGTH != common.LENGTH
+        or past_evaluations.LENGTH != common.LENGTH
+    ):
         past_evaluations.reset_dict()
-    
-    
-    
+
+
 def codemaker(combination: str) -> tuple:
     """
     Fonction principale du codemaker. Elle met à jour les combinaisons possibles et choisit une nouvelle solution
@@ -44,17 +48,17 @@ def codemaker(combination: str) -> tuple:
             (nombre de couleurs bien placées, nombre de couleurs mal placées).
     """
     global solution, permanent_combinations, possible_combinations
-    
+
     # Évalue la combinaison proposée par rapport à la solution actuelle
     ev = common.evaluation(combination, solution)
     # Met à jour les combinaisons possibles en fonction de l'évaluation
     common.maj_possibles(possible_combinations, combination, ev)
-    
+
     # Dictionnaire pour stocker les résultats d'évaluation et éviter les calculs redondants
-    
+
     best_combination = None  # Meilleure combinaison trouvée
-    max_worst_case = -float('inf')  # Taille maximale du pire cas
-    
+    max_worst_case = -float("inf")  # Taille maximale du pire cas
+
     # Parcourt toutes les combinaisons possibles pour trouver celle qui maximise le pire cas
     for test_combination in possible_combinations:
         # Dictionnaire pour regrouper les combinaisons par résultat d'évaluation
@@ -62,33 +66,41 @@ def codemaker(combination: str) -> tuple:
 
         for comb in permanent_combinations:
             # Vérifie si l'évaluation a déjà été calculée
-            if (test_combination, comb) not in past_evaluations.dict_backtracking or (comb, test_combination) not in past_evaluations.dict_backtracking:
+            if (test_combination, comb) not in past_evaluations.dict_backtracking or (
+                comb,
+                test_combination,
+            ) not in past_evaluations.dict_backtracking:
                 # Calcule l'évaluation entre `test_combination` et `comb`
                 eval_result = common.evaluation(test_combination, comb)
-                past_evaluations.dict_backtracking[(test_combination, comb)] = eval_result
-                past_evaluations.dict_backtracking[comb,test_combination] = eval_result
+                past_evaluations.dict_backtracking[(test_combination, comb)] = (
+                    eval_result
+                )
+                past_evaluations.dict_backtracking[comb, test_combination] = eval_result
             else:
                 # Récupère l'évaluation déjà calculée
-                if (test_combination,comb) in past_evaluations.dict_backtracking :
-                    
-                    
-                    eval_result = past_evaluations.dict_backtracking[(test_combination, comb)]
-                else :
-                    eval_result = past_evaluations.dict_backtracking[(comb,test_combination)]
-            
+                if (test_combination, comb) in past_evaluations.dict_backtracking:
+
+                    eval_result = past_evaluations.dict_backtracking[
+                        (test_combination, comb)
+                    ]
+                else:
+                    eval_result = past_evaluations.dict_backtracking[
+                        (comb, test_combination)
+                    ]
+
             # Ajoute la combinaison au groupe correspondant à son évaluation
             if eval_result not in evaluation_groups:
                 evaluation_groups[eval_result] = []
             evaluation_groups[eval_result].append(comb)
-        
+
         # Détermine la taille du plus grand groupe d'évaluations (pire cas)
         worst_case = max(len(group) for group in evaluation_groups.values())
-        
+
         # Si cette combinaison augmente la taille du pire cas, on la choisit
         if worst_case > max_worst_case:
             best_combination = test_combination
             max_worst_case = worst_case
-    
+
     # Met à jour la solution avec la meilleure combinaison trouvée
     solution = best_combination
     # Affiche la nouvelle solution (pour débogage ou vérification)
@@ -139,7 +151,4 @@ def codemaker(combinaison):
     
     return ev
             
-""" 
-    
-
-    
+"""

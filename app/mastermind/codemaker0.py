@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
-import sys
 import random
-# On utilise un import relatif (`from . import common`)  
-# pour s'assurer que le module est bien importé,  
-# peu importe comment l'application est exécutée avec Flask.  
-# Cela évite les erreurs liées aux imports absolus.  
-from . import common 
- 
+import sys
+
+# On utilise un import relatif (`from . import common`)
+# pour s'assurer que le module est bien importé,
+# peu importe comment l'application est exécutée avec Flask.
+# Cela évite les erreurs liées aux imports absolus.
+from . import common
+
 
 def init():
     """
@@ -14,7 +15,7 @@ def init():
     variables utilisées par le codemaker
     """
     global solution
-    solution = ''.join(random.choices(common.COLORS, k=common.LENGTH))
+    solution = "".join(random.choices(common.COLORS, k=common.LENGTH))
 
 
 def evaluation_partielle(solution, combinaison):
@@ -27,7 +28,7 @@ def evaluation_partielle(solution, combinaison):
     for i in range(len(solution)):
         if solution[i] == combinaison[i]:
             bp += 1
-    return(bp, 0)
+    return (bp, 0)
 
 
 def codemaker(combinaison):

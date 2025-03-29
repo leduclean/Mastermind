@@ -8,3 +8,4 @@ instance/
 .webassets-cache/
 app/static/scss/
 app/watch_scss.py
+.pre-commit-config.yaml

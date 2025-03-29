@@ -1,11 +1,18 @@
 # -*- coding: utf-8 -*-
 
-import unittest
-import random
 import itertools
+import random
+import unittest
 from unittest.mock import patch
+
 import app.mastermind.common as common
-from app.mastermind.codebreaker2 import codebreaker, init, possible_combinations, last_guess
+from app.mastermind.codebreaker2 import (
+    codebreaker,
+    init,
+    last_guess,
+    possible_combinations,
+)
+
 
 class TestSmartCodeBreaker(unittest.TestCase):
     def setUp(self):
@@ -29,14 +36,21 @@ class TestSmartCodeBreaker(unittest.TestCase):
         """Vérifie que les combinaisons impossibles sont bien éliminées."""
         # Premier guess
         first_guess = codebreaker(None)
-        
+
         # Simule un feedback (1 bon emplacement, 1 bonne couleur mal placée)
         feedback = (1, 1)
         second_guess = codebreaker(feedback)
-        
+
         # Vérifie que le nombre de combinaisons possibles a diminué
-        self.assertLess(len(possible_combinations), len(set(map(''.join, itertools.product(common.COLORS, repeat=common.LENGTH)))))
-        
+        self.assertLess(
+            len(possible_combinations),
+            len(
+                set(
+                    map("".join, itertools.product(common.COLORS, repeat=common.LENGTH))
+                )
+            ),
+        )
+
         # Vérifie que toutes les combinaisons restantes sont cohérentes avec le feedback
         for combo in possible_combinations:
             self.assertEqual(common.evaluation(first_guess, combo), feedback)
@@ -51,15 +65,20 @@ class TestSmartCodeBreaker(unittest.TestCase):
 
     def test_full_solution_finding(self):
         """Teste que le codebreaker peut trouver la solution."""
-        secret = 'RGBJ'  # Solution à trouver
+        secret = "RGBJ"  # Solution à trouver
         init()  # Réinitialise
-        
+
         for attempt in range(20):  # On limite à 20 essais
-            guess = codebreaker(None if attempt == 0 else common.evaluation(guess, secret))
+            guess = codebreaker(
+                None if attempt == 0 else common.evaluation(guess, secret)
+            )
             if guess == secret:
                 break
         else:
-            self.fail(f"Solution non trouvée en 20 essais. Dernière proposition: {guess}")
+            self.fail(
+                f"Solution non trouvée en 20 essais. Dernière proposition: {guess}"
+            )
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

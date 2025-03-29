@@ -19,20 +19,19 @@ class TestCheckCodemaker(unittest.TestCase):
         log_content = "RVBJ\n(0,1)\nGNJG\n(2,0)\nNNJN\n(0,0)\nGRGG\n(3,0)\nGROG\n(2,0)\nGBGG\n(4,0)"
         
         # Configuration du mock pour evaluation
-        self.mock_eval.side_effect = [(2,1), (0,4),(1,0), (4,0)]
-        
+        self.mock_eval.side_effect = [(0,1), (2,0),(0,0),(3,0), (2,0), (4,0)]
         with patch('builtins.open', mock_open(read_data=log_content)):
             result = check_codemaker("dummy_log.txt")
-            self.assertTrue(result)
+            self.assertTrue(result) # ! on obtient une erreur la dessus, je sais pas pourquoi 
             
             # Vérifie que evaluation a été appelée avec les bonnes valeurs
-            self.mock_eval.assert_any_call("RVBJ", "RVBJ")
-            self.mock_eval.assert_any_call("GNJG", "RVBJ")
-            self.mock_eval.assert_any_call("NNJN", "RVBJ")
+            self.mock_eval.assert_any_call("RVBJ", "GBGG")
+            self.mock_eval.assert_any_call("GNJG", "GBGG")
+            self.mock_eval.assert_any_call("NNJN", "GBGG")
     
     def test_invalid_log_file(self):
         """Teste avec un fichier log invalide (une évaluation incorrecte)"""
-        log_content = "RVBJ\n(2, 1)\nJBVR\n(1, 3)\nRRRR\n(4, 0)\nRVBJ\n"
+        log_content = "RVBJ\n(2, 1)\nJBVR\n(1, 3)\nRRRR\n(4, 0)\n"
         
         # Configuration du mock pour evaluation
         self.mock_eval.side_effect = [(2, 1), (0, 4), (4, 0)]  # La deuxième évaluation ne correspond pas
@@ -52,8 +51,8 @@ class TestCheckCodemaker(unittest.TestCase):
         log_content = "RVBJ\n(2, 1)\nJBVR\n"
         
         with patch('builtins.open', mock_open(read_data=log_content)):
-            with self.assertRaises(IndexError):
-                check_codemaker("odd_lines_log.txt")
+            result = check_codemaker("dummy_log.txt")
+            self.assertFalse(result)
     
 
 

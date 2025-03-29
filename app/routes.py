@@ -139,8 +139,9 @@ def auto_mode(mode, codemaker):
         message="Mode automatique terminé.",
         attempts=attempts,
         length=length,
-        nbr_of_line=nbr_of_line,
-        codebreaker = mode
+        nbr_of_line = nbr_of_line,
+        codebreaker = mode,
+        codemaker= codemaker
     )
 
 

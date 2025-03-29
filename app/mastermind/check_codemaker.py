@@ -11,25 +11,43 @@ Created on Wed Mar  5 12:46:54 2025
 from . import common
 
 def check_codemaker(log_file):
-    
-    #Prend la solution donc l'avant derniere ligne
-    #Et pour chaque pair de ligne regarde si l'evaluation du tried avec la solution est la meme que l'evaluation dans le document
-    with open(log_file, 'r') as log :
+    with open(log_file, 'r') as log:
         lines = log.readlines()
         
-        if lines[-1] != (4,0):
+        # si fichier est vide 
+        if not lines:
+            raise IndexError("Fichier log vide.")
+        
+        # si le nombre de lignes est impair, alors le format est invalide
+        if len(lines) % 2 != 0:
+            return False
+
+        # conversion de la dernière ligne en tuple pour comparaison
+        try:
+            last_eval = tuple(map(int, lines[-1].strip().strip("()").split(',')))
+        except Exception as e:
+            raise ValueError("Format de la dernière ligne invalide.") from e
+        
+        if last_eval != (4, 0):
             return False
         
-        solution = lines[-2]
-        
-        #Pas besoin de checker la derniere ligne donc len(lines)-1
-        for i in range(0, len(lines)-1, 2):
+        # recupération de la solution nettoyée
+        solution = lines[-2].strip()
+    
+        for i in range(0, len(lines) - 1, 2):
+            tried = lines[i].strip()
+            try:
+                # conversion de l'évaluation en tuple en supprimant d'abord les parenthèses
+                ev = tuple(map(int, lines[i+1].strip().strip("()").split(',')))
+            except Exception as e:
+                raise ValueError("Format d'évaluation invalide dans le log.") from e
             
-            tried, ev = lines[i:i+2]
             if ev != common.evaluation(tried, solution):
                 return False
-    
+        
     return True
+
+
 
 
 

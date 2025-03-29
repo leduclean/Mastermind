@@ -86,12 +86,16 @@
     <div class="popup-container" id="popupContainer">
         <div class="popup-message" id="winMessage">
             <h1>CODEBREAKER {{codebreaker}} found <span id="solution"></span> in  <span id="nbr_of_line"></span> try</h1>
-            <p onclick="resetGame()">Play again </p>
+            {% if codemaker =="human" %}
+                <a href="{{ url_for('main.human_codemaker', mode=codebreaker, reset='true') }}"><p>Make another combination</p></a>
+            {% endif %}
             <a href="{{ url_for('main.index') }}"><p>Go Home </p></a>
         </div>
         <div class="popup-message" id="looseMessage">
             <h1>CODEBREAKER {{codebreaker}} LOST, solution was <span id="solution"></span></h1>
-            <p onclick="resetGame()">Play again </p>
+            {% if codemaker== "human" %}
+                <a href="{{ url_for('main.human_codemaker', mode=codebreaker, reset='true') }}"><p>Make another combination</p></a>
+            {% endif %}
             <a href="{{ url_for('main.index') }}"><p>Go Home </p></a>
         </div>
     </div>

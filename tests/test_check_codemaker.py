@@ -24,9 +24,7 @@ class TestCheckCodemaker(unittest.TestCase):
         self.mock_eval.side_effect = [(0, 1), (2, 0), (0, 0), (3, 0), (2, 0), (4, 0)]
         with patch("builtins.open", mock_open(read_data=log_content)):
             result = check_codemaker("dummy_log.txt")
-            self.assertTrue(
-                result
-            )  # ! on obtient une erreur la dessus, je sais pas pourquoi
+            self.assertTrue(result)
 
             # Vérifie que evaluation a été appelée avec les bonnes valeurs
             self.mock_eval.assert_any_call("RVBJ", "GBGG")

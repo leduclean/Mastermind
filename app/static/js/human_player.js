@@ -228,7 +228,7 @@ if (error) {
 if (cplaced == length) {
   displayWin(currentLine - 1);
 }
-if (currentLine > nbr_of_line) {
+else if (currentLine > nbr_of_line) {
   displayLoose();
 }
 

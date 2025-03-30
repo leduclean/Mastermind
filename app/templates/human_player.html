@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
@@ -10,21 +10,21 @@
   </head>
   <style>
     :root {
-        --length: {
-                {
-                length
-            }
+      --length: {
+          {
+          length
         }
+      }
 
-        ;
+      ;
 
-        --nbr-of-line: {
-                {
-                nbr_of_line
-            }
+      --nbr-of-line: {
+          {
+          nbr_of_line
         }
+      }
 
-        ;
+      ;
     }
   </style>
 
@@ -140,13 +140,20 @@
     <div class="popup-container" id="popupContainer">
       <div class="popup-message" id="winMessage">
         <h1>YOU WIN IN <span id="nbr_of_line"></span> try</h1>
-        <p onclick="resetGame()">Play again ?</p>
-        <a href="{{ url_for('main.index') }}"><p>Go Home</p></a>
+        {% if codemakerversion == "human" %}
+        <a
+          href="{{ url_for('main.human_codemaker', mode=codebreaker, reset='true') }}"
+        >
+          <p>Play another game</p>
+        </a>
+        {% endif %}
       </div>
       <div class="popup-message" id="looseMessage">
         <h1>YOU Loose, solution was {{solution}}</h1>
         <p onclick="resetGame()">Play again ?</p>
-        <a href="{{ url_for('main.index') }}"><p>Go Home</p></a>
+        <a href="{{ url_for('main.index') }}">
+          <p>Go Home</p>
+        </a>
       </div>
     </div>
 
@@ -155,8 +162,8 @@
       var length = {{ length | tojson}};
       var cplaced = {{ cplaced | tojson}};
       var iplaced = {{ iplaced | tojson}};
-      var solution = {{solution |tojson }};
-      var error = {{error | tojson}}
+      var solution = {{ solution | tojson }};
+      var error = {{ error | tojson}}
     </script>
     <script
       type="module"

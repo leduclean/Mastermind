@@ -105,7 +105,7 @@ function displayNextAttempt() {
     if (currentLine == totalAttempts) {
       displayWin(currentLine, solution);
     }
-    if (currentLine > nbr_of_line) {
+    else if (currentLine > nbr_of_line) {
       displayLoose(solution);
     }
     // Passer à l'essai suivant après un délai

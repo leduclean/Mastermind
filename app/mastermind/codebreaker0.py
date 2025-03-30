@@ -2,26 +2,26 @@
 
 import random
 
-# On utilise un import relatif (`from . import common`)
-# pour s'assurer que le module est bien importé,
-# peu importe comment l'application est exécutée avec Flask.
-# Cela évite les erreurs liées aux imports absolus.
-from . import common  # N'utilisez pas la syntaxe "form random import XXX"
+# We use a relative import (`from . import common`)
+# to ensure the module is correctly imported,
+# regardless of how the application is executed with Flask.
+# This prevents errors related to absolute imports.
+from . import common
 
 
 def init():
     """
-    Une fonction qui ne fait rien... pour cette version triviale.
-    Pour vos codebreaker plus avancés, c'est ici que vous pouvez initialiser
-    un certain nombre de variables à chaque début de partie.
+    A function that does nothing... for this trivial version.
+    For more advanced codebreakers, this is where you can initialize
+    variables at the beginning of each game.
     """
     return
 
 
 def codebreaker(evaluation_p: tuple):
     """
-    L'argument evaluation_p est l'évaluation qu'on reçoit pour la dernière
-    combinaison qu'on a proposée (et vaut None si c'est le premier coup de la
-    partie). Cette version triviale n'utilise pas cette information, puisqu'elle joue au hasard.
+    The argument evaluation_p is the evaluation received for the last
+    proposed combination (and is None if it's the first move of the game).
+    This trivial version does not use this information, as it plays randomly.
     """
     return "".join(random.choices(common.COLORS, k=common.LENGTH))

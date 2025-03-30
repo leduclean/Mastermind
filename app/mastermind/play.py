@@ -4,33 +4,33 @@ import importlib
 from . import common
 
 
-# TODO : passer les commentaires en anglais
+# TODO: change comments to English
 def get_codebreaker_module(version: int):
-    """Importe dynamiquement le module codebreaker de la version donnée."""
+    """Dynamically imports the codebreaker module for the given version."""
     try:
         return importlib.import_module(f"app.mastermind.codebreaker{version}")
     except ImportError:
-        raise ValueError(f"Module codebreaker{version} non trouvé.")
+        raise ValueError(f"Module codebreaker{version} not found.")
 
 
 def get_codemaker_module(version: int):
-    """Importe dynamiquement le module codemaker de la version donnée."""
+    """Dynamically imports the codemaker module for the given version."""
     try:
         return importlib.import_module(f"app.mastermind.codemaker{version}")
     except ImportError:
-        raise ValueError(f"Module codemaker{version} non trouvé.")
+        raise ValueError(f"Module codemaker{version} not found.")
 
 
 def check_compatibility(codemaker_version: int, codebreaker_version: int):
     """
-    Vérifie que le couple codemaker/codebreaker est compatible.
-    On lève une erreur si l'on tente de jouer codemaker0 avec codebreaker2,
-    car codebreaker2 a besoin d'une évaluation complète.
+    Checks that the codemaker/codebreaker pair is compatible.
+    Raises an error if you try to play with codemaker0 and codebreaker2,
+    as codebreaker2 requires a full evaluation.
     """
 
     if (codemaker_version, codebreaker_version) == (0, 2):
         raise ValueError(
-            "Incompatibilité détectée : codebreaker2 nécessite une évaluation complète et ne peut pas être utilisé avec codemaker0."
+            "Incompatibility detected: codebreaker2 requires a full evaluation and cannot be used with codemaker0."
         )
 
 
@@ -43,9 +43,9 @@ def play(
     get_input=None,
 ) -> int:
     """
-    Joue une partie pour un codebreaker donné.
+    Plays a game for a given codebreaker.
 
-    c'est un mode automatique, get_input reste None et le codebreaker génère ses combinaisons.
+    This is an automatic mode, get_input stays None, and the codebreaker generates its combinations.
     """
     check_compatibility(codemaker_version, codebreaker_version)
     codemaker_module = get_codemaker_module(codemaker_version)
@@ -60,14 +60,14 @@ def play(
 
     if not quiet:
         output(
-            "Combinaisons de taille {} avec couleurs disponibles : {}".format(
+            "Combinations of size {} with available colors: {}".format(
                 common.LENGTH, common.COLORS
             )
         )
 
     while True:
-        # Si get_input est défini, on l'utilise pour récupérer l'input,
-        # sinon, le codebreaker automatique génère sa combinaison.
+        # If get_input is defined, use it to get the input,
+        # otherwise, the codebreaker automatically generates its combination.
         if get_input is not None:
             combination = get_input(ev)
         else:
@@ -78,28 +78,32 @@ def play(
 
         if not quiet:
             output(
-                "Essai {} : {} ({} bien placées, {} mal placées)".format(
+                "Attempt {}: {} ({} correct, {} incorrect)".format(
                     nbr_of_try, combination, ev[0], ev[1]
                 )
             )
 
         if ev[0] >= common.LENGTH:
             if not quiet:
-                output("Bravo ! Trouvé {} en {} essais".format(combination, nbr_of_try))
+                output(
+                    "Congratulations! Found {} in {} attempts".format(
+                        combination, nbr_of_try
+                    )
+                )
             return nbr_of_try
 
 
 class FileLogger:
     """
-    Logger qui écrit les messages dans un fichier texte.
+    Logger that writes messages to a text file.
     """
 
     def __init__(self, log_file: str):
-        # Le fichier log est construit à partir du chemin et du nom fourni.
+        # The log file is constructed from the provided path and name.
         self.log_file = f"app\\logs\\{log_file}.txt"
 
     def __call__(self, message: str):
-        # Ouvre le fichier en mode "append" pour ajouter le message avec un saut de ligne.
+        # Opens the file in "append" mode to add the message with a newline.
         with open(self.log_file, "a") as f:
             f.write(message + "\n")
 
@@ -114,18 +118,18 @@ def play_log(
     human_solution=False,
 ) -> int:
     """
-    Joue une partie pour un codebreaker sur la solution déjà initialisée.
-    Le codebreaker est réinitialisé pour chaque partie, tandis que le codemaker conserve la solution.
+    Plays a game for a codebreaker with the solution already initialized.
+    The codebreaker is reset for each game, while the codemaker keeps the solution.
 
-    La sortie (les logs) est réalisée via la fonction d'output passée en paramètre.
-    Par défaut, si aucune fonction n'est fournie, les logs sont écrits dans un fichier texte à l'aide de FileLogger.
-        int: nombre d'essais effectués.
+    The output (logs) is done via the output function passed as a parameter.
+    By default, if no function is provided, the logs are written to a text file using FileLogger.
+        int: number of attempts made.
     """
     check_compatibility(codemaker_version, codebreaker_version)
 
     if not human_solution:
         codemaker_module = get_codemaker_module(codemaker_version)
-        # Réinitialisation de la solution et du codebreaker
+        # Reset the solution and codebreaker
         if reset_solution:
             codemaker_module.init()
 
@@ -140,7 +144,7 @@ def play_log(
 
     if not quiet:
         print(
-            "combinaisons de taille {}, couleurs disponibles {}".format(
+            "Combinations of size {}, available colors {}".format(
                 common.LENGTH, common.COLORS
             )
         )
@@ -154,21 +158,21 @@ def play_log(
         )
         nbr_of_try += 1
 
-        # Enregistrement des logs via output_func
+        # Log the output via output_func
         output_func(combination)
         output_func(f"{ev[0]},{ev[1]}")
 
         if not quiet:
-            print("Essai {} : {} ({},{})".format(nbr_of_try, combination, ev[0], ev[1]))
+            print(f"Attempt {nbr_of_try}: {combination} ({ev[0]},{ev[1]})")
 
         if ev[0] >= common.LENGTH:
             if not quiet:
-                print("Bravo ! Trouvé {} en {} essais".format(combination, nbr_of_try))
+                print(f"Congratulations! Found {combination} in {nbr_of_try} attempts")
             return nbr_of_try
 
 
-# Pour ne pas executer ces fonctions lors des imports
+# To avoid executing these functions during imports
 if __name__ == "__main__":
-    print("Ce fichier play.py est exécuté directement.")
-    # appelle des fonctions ici
-    play_log(0, 2, "nul")
+    print("This play.py file is executed directly.")
+    # call functions here
+    play_log(0, 2, "none")

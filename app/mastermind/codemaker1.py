@@ -1,25 +1,30 @@
 import random
 
-# On utilise un import relatif (`from . import common`)
-# pour s'assurer que le module est bien importé,
-# peu importe comment l'application est exécutée avec Flask.
-# Cela évite les erreurs liées aux imports absolus.
+# We use a relative import (`from . import common`)
+# to ensure the module is correctly imported,
+# regardless of how the application is executed with Flask.
+# This avoids errors related to absolute imports.
 from . import common
 
 
 def init():
     """
-    Cette fonction, appellée à chaque début de partie, initialise un certain nombre de
-    variables utilisées par le codemaker
+    This function is called at the beginning of each game
+    and initializes variables used by the codemaker.
     """
     global solution
     solution = "".join(random.choices(common.COLORS, k=common.LENGTH))
 
 
-def codemaker(combinaison):
+def codemaker(combination):
     """
-    Cette fonction corrige la combinaison proposée par le codebreaker
-    (donnée en argument)
+    This function evaluates the combination proposed by the codebreaker.
+
+    Args:
+        combination (str): The combination provided by the codebreaker.
+
+    Returns:
+        tuple[int, int]: The result of the evaluation.
     """
     global solution
-    return common.evaluation(combinaison, solution)
+    return common.evaluation(combination, solution)

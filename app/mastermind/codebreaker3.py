@@ -1,6 +1,6 @@
 import itertools
 
-from . import common  # N'utilisez pas la syntaxe "form random import XXX"
+from . import common  # Do not use the syntax "from random import XXX"
 from . import past_evaluations
 
 permanent_combinations = set()
@@ -10,6 +10,12 @@ Optimization = True
 
 
 def first_guess():
+    """
+    Generates the first guess using a cyclic pattern of colors.
+
+    Returns:
+        str: A combination of colors as the first guess.
+    """
     # Initialize the guess
     guess = []
 
@@ -22,13 +28,18 @@ def first_guess():
 
 
 def init():
-    # Initialise l'ensemble des valeurs possibles
+    """
+    Initializes the set of possible values at the start of each game.
+    Also resets the evaluation dictionary if needed.
+    """
     global possible_combinations, permanent_combinations, last_guess
     possible_combinations = set(
         map("".join, itertools.product(common.COLORS, repeat=common.LENGTH))
     )
     permanent_combinations = possible_combinations.copy()
     last_guess = None
+
+    # Reset past evaluations if the stored length does not match the current game length
     if (
         past_evaluations.LENGTH != common.LENGTH
         or past_evaluations.LENGTH != common.LENGTH
@@ -38,42 +49,41 @@ def init():
 
 def codebreaker(evaluation_p: tuple) -> str:
     """
-    Génère une combinaison à essayer en minimisant l'espace des solutions possibles dans le pire des cas.
+    Generates a combination to try, minimizing the solution space in the worst-case scenario.
 
     Args:
-        evaluation_p (tuple[int, int] | None): L'évaluation de la dernière combinaison proposée.
-            Si c'est le premier essai, `evaluation_p` est `None`.
+        evaluation_p (tuple[int, int] | None): The evaluation of the last proposed combination.
+            If this is the first attempt, `evaluation_p` is `None`.
 
     Returns:
-        str: Une combinaison à essayer, choisie pour minimiser l'espace des solutions possibles dans le pire des cas.
+        str: A combination chosen to minimize the worst-case solution space.
     """
-    global possible_combinations, permanent_combinations, last_guess, Optimization  # Variables globales
+    global possible_combinations, permanent_combinations, last_guess, Optimization  # Global variables
 
     if evaluation_p is not None:
-        # Met à jour l'ensemble des combinaisons possibles en fonction de l'évaluation précédente
+        # Updates the set of possible combinations based on the previous evaluation
         common.maj_possibles(possible_combinations, last_guess, evaluation_p)
 
-    best_combination = None  # Meilleure combinaison trouvée
-    min_worst_case = float("inf")  # Taille minimale du pire cas
+    best_combination = None  # Best combination found
+    min_worst_case = float("inf")  # Minimum size of the worst case
 
-    # Parcourt toutes les combinaisons dans `permanent_combinations` pour trouver celle qui minimise le pire cas
-    if Optimization == True:
-        if last_guess == None:
-
+    # Find the combination that minimizes the worst-case scenario
+    if Optimization:
+        if last_guess is None:
             last_guess = first_guess()
             return last_guess
 
     for test_combination in permanent_combinations:
-        # Dictionnaire pour regrouper les combinaisons par résultat d'évaluation
+        # Dictionary to group combinations by evaluation result
         evaluation_groups = {}
 
         for comb in possible_combinations:
-            # Vérifie si l'évaluation a déjà été calculée
+            # Check if the evaluation has already been calculated
             if (test_combination, comb) not in past_evaluations.dict_backtracking or (
                 comb,
                 test_combination,
             ) not in past_evaluations.dict_backtracking:
-                # Calcule l'évaluation entre `test_combination` et `comb`
+                # Compute the evaluation between `test_combination` and `comb`
                 eval_result = common.evaluation(test_combination, comb)
                 past_evaluations.dict_backtracking[(test_combination, comb)] = (
                     eval_result
@@ -82,10 +92,8 @@ def codebreaker(evaluation_p: tuple) -> str:
                     eval_result
                 )
             else:
-
-                # Récupère l'évaluation déjà calculée
+                # Retrieve the previously calculated evaluation
                 if (test_combination, comb) in past_evaluations.dict_backtracking:
-
                     eval_result = past_evaluations.dict_backtracking[
                         (test_combination, comb)
                     ]
@@ -94,20 +102,20 @@ def codebreaker(evaluation_p: tuple) -> str:
                         (comb, test_combination)
                     ]
 
-            # Ajoute la combinaison au groupe correspondant à son évaluation
+            # Add the combination to the group corresponding to its evaluation
             if eval_result not in evaluation_groups:
                 evaluation_groups[eval_result] = []
             evaluation_groups[eval_result].append(comb)
 
-        # Détermine la taille du plus grand groupe d'évaluations (pire cas)
+        # Determine the size of the largest evaluation group (worst case)
         worst_case = max(len(group) for group in evaluation_groups.values())
 
-        # Si cette combinaison réduit l'espace plus que la précédente, on la choisit
+        # If this combination reduces the search space more than the previous best, choose it
         if worst_case < min_worst_case:
             best_combination = comb
             min_worst_case = worst_case
 
-    # Sauvegarde la dernière combinaison essayée
+    # Save the last attempted combination
     last_guess = best_combination
-    # Retourne la meilleure combinaison trouvée
+    # Return the best combination found
     return best_combination

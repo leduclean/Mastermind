@@ -142,9 +142,12 @@
         <h1>YOU WIN IN <span id="nbr_of_line"></span> try</h1>
         {% if codemakerversion == "human" %}
         <a
-          href="{{ url_for('main.human_codemaker', mode=codebreaker, reset='true') }}"
-        >
-          <p>Play another game</p>
+          href="{{ url_for('main.human_codemaker', mode=mode, reset='true') }}"
+        > 
+          <p>Play another game </p>
+        </a>
+        <a href="{{ url_for('main.index') }}">
+          <p>Go Home</p>
         </a>
         {% endif %}
       </div>

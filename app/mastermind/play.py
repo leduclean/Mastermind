@@ -4,7 +4,6 @@ import importlib
 from . import common
 
 
-# TODO: change comments to English
 def get_codebreaker_module(version: int):
     """Dynamically imports the codebreaker module for the given version."""
     try:

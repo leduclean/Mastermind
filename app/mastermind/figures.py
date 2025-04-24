@@ -18,7 +18,7 @@ def show_histogram(codemaker_version: int, codebreaker_version: int, nbr_of_game
         codemaker_module.init()  # Generate a new solution for each game
         results.append(play(codemaker_version, codebreaker_version, False, True))
 
-    plt.style.use("seaborn-darkgrid")
+    plt.style.use("seaborn-v0_8-darkgrid")
     plt.hist(
         results,
         bins=range(min(results), max(results) + 2),
@@ -51,7 +51,7 @@ def show_gain(codemaker_version: int, version1: int, version2: int, nbr_of_game:
         score2 = play(codemaker_version, version2, False, True)
         gains.append(score1 - score2)
 
-    plt.style.use("seaborn-darkgrid")
+    plt.style.use("seaborn-v0_8-darkgrid")
     plt.scatter(range(1, nbr_of_game + 1), gains, color="orange", alpha=0.7)
     plt.axhline(y=0, color="red", linestyle="--", linewidth=1)  # Baseline at y=0
     plt.xlabel("Game Number")
@@ -65,4 +65,4 @@ def show_gain(codemaker_version: int, version1: int, version2: int, nbr_of_game:
 # Example usage:
 if __name__ == "__main__":
     show_histogram(1, 1, 1000)  # Runs properly
-    # show_gain(1, 1, 2, 100)  # Raises an error if codemaker0 is used with codebreaker2
+    # show_gain(1, 3, 2, 10)  # Raises an error if codemaker0 is used with codebreaker2

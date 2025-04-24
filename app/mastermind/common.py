@@ -1,9 +1,22 @@
 #!/usr/bin/env python3
 
-LENGTH = 4
-# ? laisser en francais les couleurs parce que sinon on perds en diversité: blue -> B brown -> B  ou grey-> G, green -> V
-COLORS = ["R", "V", "B", "J", "N", "M", "O", "G"]
 import itertools
+
+# Are you testing the graphical interface?
+# The interface will automatically handle changes to the game settings.
+# You can change the code length (LENGTH) up to a maximum of 8,
+# but you may only reduce the number of colors.
+
+# Are you testing the function implementations?
+# You’re free to adjust the game settings
+
+
+# ============= GAME PARAMETERS =============
+
+LENGTH = 4  # Max allowed value is 8 for graphic interphace
+COLORS = ["R", "V", "B", "J", "N", "M", "O", "G"]
+
+# ============================================
 
 
 def verif_combination(combination: str):

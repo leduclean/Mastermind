@@ -427,9 +427,7 @@ button.submit:hover .button-text {
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
-  /* fond semi-transparent */
-  backdrop-filter: blur(5px);
-  /* flou sur l'arri�re-plan */
+  /* flou sur l'arrière-plan */
   justify-content: center;
   align-items: center;
   z-index: 1000;
@@ -448,9 +446,6 @@ button.submit:hover .button-text {
   border-radius: 8px;
   text-align: center;
   transform: scale(0);
-<<<<<<< HEAD
-  animation: popup 0.5s forwards; }
-=======
   animation: popup 0.5s forwards;
 }
 .popup-message a {
@@ -459,7 +454,6 @@ button.submit:hover .button-text {
 .popup-message p {
   cursor: pointer;
 }
->>>>>>> 5a73b20 (reformatage complet)
 
 /* Animation d'apparition de la popup */
 @keyframes popup {

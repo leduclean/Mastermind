@@ -1,68 +1,63 @@
-# Mastermind - Interface graphique avec Flask
+# Mastermind – Web Interface with Flask
 
-Ce projet propose une interface web interactive pour le jeu Mastermind, développée en Python avec le micro-framework Flask.
+An interactive web interface for the classic Mastermind game, built in Python using the Flask micro-framework. Multiple versions of the Codebreaker and Codemaker engines have been implemented, from basic strategies up to Knuth’s five-guess algorithm.
 
-## Prérequis
+## Prerequisites
 
-- Python 3.9 ou version supérieure  
-- pip (gestionnaire de paquets Python)  
-- Accès à un terminal ou à un invite de commandes
+- **Python 3.9** or higher
+- **pip** (Python package installer)
 
 ## Installation
 
-1. Créer un environnement virtuel (recommandé) :  
+1. **Create and activate a virtual environment**
    ```bash
    python -m venv venv
-   ```
+   source venv/bin/activate      # macOS / Linux
+   .\venv\Scripts\activate       # Windows
 
-2. (Windows uniquement) Autoriser l'exécution de scripts PowerShell :  
-   ```powershell
-   Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-   ```
+2. **Install dependencies**
 
-3. Activer l’environnement virtuel :  
-   ```bash
-   source venv/bin/activate     # Sur macOS / Linux  
-   .\venv\Scripts\activate      # Sur Windows
-   ```
 
-4. Installer les dépendances :  
-   ```bash
-   pip install -r requirements.txt
-   ```
+```pip install -r requirements.txt```
 
-## Lancer l’interface graphique
+## Running the Application
 
-1. Depuis la racine du projet, lancez :  
-   ```bash
-   python run.py
-   ```
+From the project root, start the Flask server:
+```python run.py```
 
-2. Ouvrez l’URL affichée dans le terminal (généralement `http://127.0.0.1:5000`).
+Open the URL displayed in your browser (default: http://127.0.0.1:5000).
 
-3. Personnalisation des paramètres du jeu :  
-   - Dans `common.py`, modifiez la constante `LENGTH` pour ajuster le nombre de colonnes (valeur maximale : 8, attendez vous a ce que les delais d'attentes soit très longs pour les modes automatiques en raison des calculs nécessaires).
-   - Vous pouvez réduire la liste `COLORS`, mais pas l’agrandir.  
-   - L’interface s’adapte automatiquement à ces changements.
+## Game Configuration
+Edit app/mastermind/common.py to adjust:
 
-## Structure du projet et exécution des modules backend
+- LENGTH: number of pegs (max 8)
+- COLORS: available color options
 
-Le projet utilise Flask, et le dossier `app/mastermind` est un package Python. Pour exécuter un module interne, placez-vous à la racine du projet et lancez :  
-```bash
-python -m app.mastermind.nom_du_module
-```
-Par exemple, pour exécuter le module `figures` :  
-```bash
-python -m app.mastermind.figures
-```
+The UI will adapt automatically to these settings.
 
-## Tests
+## Project Structure
 
-Les tests unitaires sont situés dans le dossier `tests` et utilisent la librairie `unittest`. Pour les lancer :  
-```bash
-python -m unittest discover -s tests
-```
+- **Game Logic Modules**: basic to advanced strategies (codebreaker1.py → codebreaker3.py), Codemaker implementations (codemaker1.py, codemaker2.py, …), Knuth’s five-guess algorithm in the most advanced version
 
-## Auteur
+- **Utility Modules**: common.py, figures.py, past_evaluations.py
 
-Projet réalisé dans le cadre d’un apprentissage personnel / universitaire.
+- **UI Templates**: templates/*.html
+
+- **Static Assets**: static/css, static/js
+
+- **Unit Tests**: tests/
+
+### Running Backend Modules
+To execute any internal module directly:
+```python -m app.mastermind.<module_name>```
+
+For example:
+```python -m app.mastermind.figures```
+
+### Testing
+Discover and run all unit tests:
+
+```python -m unittest discover -s tests```
+
+### Authors
+Personal/university project at "La Prepa des INP" by Leandre LE DUC and Simon VAN BOMMEL
